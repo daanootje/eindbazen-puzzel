@@ -1,0 +1,81 @@
+swagger: '2.0'
+info:
+  version: "1.0"
+  title: Pandora Puzzle
+schemes:
+  - http
+basePath: /api
+host: "localhost:8080"
+produces:
+  - application/json
+paths:
+  /applications:
+    get:
+      summary: Read applications
+      operationId: "getapplication"
+      tags:
+        - Applications
+      responses:
+        200:
+          description: List of all applications
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Application'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Application'
+
+  /applications/{application_id}:
+    get:
+      summary: Read application
+      description: |
+        Returns details about one application
+      operationId: "getapplicationID"
+      tags:
+        - Applications
+      parameters:
+        - name: application_id
+          in: path
+          type: string
+          description: ID of the application
+          pattern: "^[a-z][a-z0-9-]+$"
+          required: true
+      responses:
+        200:
+          description: Details of one application
+          schema:
+            $ref: '#/definitions/Application'
+        404:
+          description: Not found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Application'
+
+definitions:
+  Application:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Unique identifier
+      name:
+        type: string
+        description: A human-readable name
+      team_id:
+        type: string
+        description: ID of the team, responsible for this application
+      description:
+        type: string
+        description: Purpose of this application
+      url:
+        type: string
+        description: Live URL of the application
+      scm_url:
+        type: string
+        description: URL of SCM repository
+      documentation_url:
+        type: string
+        description: URL of documentation
