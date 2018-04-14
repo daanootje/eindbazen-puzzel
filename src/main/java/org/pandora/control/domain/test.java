@@ -1,4 +1,4 @@
 package org.pandora.control.domain;
 
-public class Puzzle {
+public class test {
 }
