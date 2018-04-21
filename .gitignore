@@ -4,5 +4,7 @@ target/
 
 *.class
 *.log
+.*
 
 application.conf
+/bin/
