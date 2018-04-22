@@ -61,6 +61,11 @@
             <version>${jersey.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-multipart</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.7</version>
@@ -104,6 +109,11 @@
             <version>2.16.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+		    <groupId>io.swagger</groupId>
+		    <artifactId>swagger-jaxrs</artifactId>
+		    <version>1.5.0</version>
+		</dependency>
     </dependencies>
 
     <properties>
@@ -118,34 +128,35 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <plugin>
+        	<plugin>
                 <groupId>org.zalando.maven.plugins</groupId>
                 <artifactId>swagger-codegen-maven-plugin</artifactId>
                 <version>0.4.38</version>
+                <configuration>
+                  	<apiFile>${project.basedir}/swagger.yml</apiFile>
+                  	<yamlToJson>true</yamlToJson>
+                  	<language>jaxrsinterfaces</language>
+                  	<apiPackage>org.pandora.api.controller</apiPackage>
+                  	<modelPackage>org.pandora.api.controller.model</modelPackage>
+              	</configuration>
                 <executions>
                     <execution>
-                        <id>generate-api</id>
+                        <id>swagger-codegen</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>codegen</goal>
                         </goals>
-                        <configuration>
-                            <apiFile>${project.basedir}/swagger.yml</apiFile>
-                            <language>springinterfacesResponseEntityNoSwaggerAnnotations</language>
-                            <apiPackage>de.zalando.wholesale.warehouseallocation.api.controller</apiPackage>
-                            <modelPackage>de.zalando.wholesale.warehouseallocation.api.model</modelPackage>
-                        </configuration>
                     </execution>
                 </executions>
                 <dependencies>
                     <dependency>
                         <groupId>org.zalando.stups</groupId>
-                        <artifactId>swagger-codegen-template-spring-interfaces</artifactId>
+                        <artifactId>swagger-codegen-template-jaxrs-interfaces</artifactId>
                         <version>0.4.38</version>
                     </dependency>
                 </dependencies>
             </plugin>
-        </plugins>
+        </plugins>        
     </build>
 
 </project>

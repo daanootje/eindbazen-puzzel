@@ -8,24 +8,32 @@ basePath: /api
 host: "localhost:8080"
 produces:
   - application/json
+consumes:
+  - application/json
 paths:
-  /applications:
+  /time:
     get:
-      summary: Read applications
-      operationId: "getapplication"
-      tags:
-        - Applications
+      summary: Get remaining time
+      operationId: "retrieveTime"
       responses:
         200:
-          description: List of all applications
+          description: Remaining time
+          type: integer
+    post:
+      summary: Start, stop or restart time
+      operationId: "startStopResetTime"
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: timeStatus
+          description: The user to create.
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/Application'
-        default:
-          description: Unexpected error
-          schema:
-            $ref: '#/definitions/Application'
+            type: string
+            enum: [start, stop, restart]
+      responses:
+        201:
+          description: Applied
 
   /applications/{application_id}:
     get:
