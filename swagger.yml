@@ -27,10 +27,9 @@ paths:
       parameters:
         - in: body
           name: timeStatus
-          description: The user to create.
+          description: The call to make
           schema:
-            type: string
-            enum: [start, stop, restart]
+            $ref: '#/definitions/TimeStatus'
       responses:
         201:
           description: Applied
@@ -41,8 +40,6 @@ paths:
       description: |
         Returns details about one application
       operationId: "getapplicationID"
-      tags:
-        - Applications
       parameters:
         - name: application_id
           in: path
@@ -63,6 +60,14 @@ paths:
             $ref: '#/definitions/Application'
 
 definitions:
+
+  TimeStatus:
+    type: object
+    properties:
+      status:
+        type: string
+        enum: [start, stop, restart]
+
   Application:
     type: object
     properties:
