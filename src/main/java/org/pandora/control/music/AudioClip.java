@@ -14,18 +14,30 @@ public class AudioClip implements LineListener {
     private Path path;
     private Boolean audioCompleted;
 
-    public AudioClip(Path path) {
+    public AudioClip(Path path) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         this.path = path;
         clipName = path.getFileName().toString();
         initialize();
     }
 
     public void playAudio() {
-        clip.start();
+        if (!clip.isActive()) {
+            clip.start();
+        }
     }
 
-    public void stopAudio() {
+    public void pauseAudio() {
+        clip.stop();
+    }
+
+    public void restartAudio() {
+        clip.stop();
         clip.close();
+        try {
+            initialize();;
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            log.error("Something went wrong restarting the audio");
+        }
     }
 
     @Override
@@ -34,13 +46,11 @@ public class AudioClip implements LineListener {
         if (type == LineEvent.Type.START) {
             audioCompleted = false;
         } else if (type == LineEvent.Type.STOP) {
-            clip.close();
-            initialize();
             audioCompleted = true;
         }
     }
 
-    private void initialize() {
+    private void initialize() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(path.toFile());
             AudioFormat format = audioStream.getFormat();
@@ -50,10 +60,13 @@ public class AudioClip implements LineListener {
             clip.open(audioStream);
         } catch (UnsupportedAudioFileException e) {
             log.error(String.format("%s - Unsupported audio extension: %s", clipName, e.getMessage()));
+            throw e;
         } catch (IOException e) {
             log.error(String.format("%s - IOException occurred when reading audio file: %s", clipName, e.getMessage()));
+            throw e;
         } catch (LineUnavailableException e) {
             log.error(String.format("%s - LineUnavailableException occurred when reading audio file: %s", clipName, e.getMessage()));
+            throw e;
         }
     }
 

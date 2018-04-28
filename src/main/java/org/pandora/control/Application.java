@@ -34,11 +34,11 @@ public class Application {
 
     @Bean
     public String getAudioFolder() {
-        return "C:/Users/D.Rotman/Downloads/audio";
+        return "C:/Users/Daan/Downloads/audio";
     }
 
     @Bean
     public AudioManager getAudioManager() {
-        return new AudioManager("C:/Users/D.Rotman/Downloads/audio");
+        return new AudioManager("C:/Users/Daan/Downloads/audio");
     }
 }
