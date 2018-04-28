@@ -67,6 +67,13 @@ definitions:
         type: string
         enum: [start, stop, resume, restart]
 
+  AudioStatus:
+    type: object
+    properties:
+      status:
+        type: string
+        enum: [play, stop, resume, restart]
+
   Application:
     type: object
     properties:
