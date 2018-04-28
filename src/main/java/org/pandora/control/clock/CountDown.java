@@ -11,6 +11,7 @@ public class CountDown {
 	private TimerTask task;
     
     public CountDown(int startTimeInSeconds) {
+    	timer = new Timer();
     	maxTime = startTimeInSeconds;
     	timeRemaining = startTimeInSeconds;
     	task = new TimerTask() {

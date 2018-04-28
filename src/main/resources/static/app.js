@@ -14,14 +14,20 @@ function setConnected(connected) {
 
 function connect() {
     var socket = new SockJS('/endpoint_time');
+    socket.onmessage = function(e) {
+        showGreeting("test");
+    };
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/time', function (greeting) {
-            showGreeting(JSON.parse(greeting.body).content);
+        stompClient.subscribe('/topic/time', function (time) {
+            showGreeting(JSON.parse(time.body));
         });
     });
+    stompClient.onmessage = function(e) {
+        showGreeting("test");
+    };
 }
 
 function disconnect() {
@@ -33,7 +39,7 @@ function disconnect() {
 }
 
 function sendName() {
-    stompClient.send("/app/time/remaining", {}, JSON.stringify({'name': $("#name").val()}));
+    stompClient.send("/app/time/remaining", {});
 }
 
 function showGreeting(message) {

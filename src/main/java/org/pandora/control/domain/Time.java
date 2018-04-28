@@ -1,98 +1,62 @@
 package org.pandora.control.domain;
 
-import javax.ws.rs.core.Response;
-
-import lombok.extern.slf4j.Slf4j;
-import org.pandora.api.controller.NotFoundException;
-import org.pandora.api.controller.TimeApi;
 import org.pandora.api.controller.model.TimeStatus;
 import org.pandora.control.clock.CountDown;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.util.HtmlUtils;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import javax.ws.rs.core.Response;
 
-//@Component
-@Slf4j
-@Controller
-public class Time implements TimeApi{
+@RestController
+@EnableScheduling
+@RequestMapping("/time")
+public class Time {
 
 	private CountDown time;
+    private SimpMessageSendingOperations template;
 
 	@Autowired
-	public Time(CountDown time) {
+	public Time(CountDown time, SimpMessageSendingOperations template) {
 		this.time = time;
-	}
-
-	@Override
-	public Response retrieveTime() throws NotFoundException {
-		Gson gson = new Gson();
-		return null;
+        this.template = template;
 	}
 
 	@MessageMapping("/time/remaining")
 	@SendTo("/topic/time")
-	public Greeting send(HelloMessage message) throws Exception {
-		System.out.println("SOMETHING");
-		Thread.sleep(1000); // simulated delay
-		return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
+	public Integer send() {
+		return time.getRemainingTimeInSeconds();
 	}
 
-	@Override
-	public Response startStopResetTime(TimeStatus timeStatus) {
+    @Scheduled(fixedRate = 1000)
+    private void updating() {
+        this.template.convertAndSend("/topic/time", time.getRemainingTimeInSeconds());
+    }
+
+    @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
+	public Response startStopResetTime(@RequestBody TimeStatus timeStatus) {
 		switch (timeStatus.getStatus()) {
 			case resume:
 				time.resume();
+				break;
 			case stop:
 				time.pause();
+				break;
 			case start:
 				time.start();
+				break;
 			case restart:
 				time.restart();
+				break;
 		}
 		return Response.accepted().build();
-	}
-
-	public class Greeting {
-
-		private String content;
-
-		public Greeting() {
-		}
-
-		public Greeting(String content) {
-			this.content = content;
-		}
-
-		public String getContent() {
-			return content;
-		}
-
-	}
-
-	public class HelloMessage {
-
-		private String name;
-
-		public HelloMessage() {
-		}
-
-		public HelloMessage(String name) {
-			this.name = name;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
 	}
 
 }
