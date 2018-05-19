@@ -72,7 +72,7 @@ definitions:
     properties:
       status:
         type: string
-        enum: [play, stop, resume, restart]
+        enum: [play, pause, resume, restart]
 
   Application:
     type: object

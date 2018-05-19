@@ -24,12 +24,16 @@ public class Audio {
     @RequestMapping(value = "/{audioName}", method = RequestMethod.POST, consumes = "application/json")
     public Response startStopResetAudio(@PathVariable String audioName, @RequestBody AudioStatus audioStatus) {
         switch (audioStatus.getStatus()) {
-            case stop:
-                audioManager.stopMusic(audioName);
+            case pause:
+                audioManager.pauseMusic(audioName);
                 break;
             case play:
                 audioManager.playMusic(audioName);
                 break;
+            case restart:
+                audioManager.restartMusic(audioName);
+                break;
+            case resume:
         }
         return Response.accepted().build();
     }

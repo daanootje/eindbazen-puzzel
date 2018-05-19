@@ -3,6 +3,8 @@ package org.pandora.control.music;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,7 +23,14 @@ public class AudioManager {
         try {
             Files.newDirectoryStream(Paths.get(audioLocation),
                     path -> path.toString().endsWith(".wav") || path.toString().endsWith(".mp4"))
-                    .forEach(path -> audioCollection.put(removeExtension(path), new AudioClip(path)));
+                    .forEach(path -> {
+                        String key = removeExtension(path);
+                        try {
+                            audioCollection.put(key, new AudioClip(path));
+                        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+                            audioCollection.remove(key);
+                        }
+                    });
         } catch (IOException e) {
             log.error(String.format("IOException occurred when reading audio files: %s", e.getMessage()));
         }
@@ -33,9 +42,15 @@ public class AudioManager {
         }
     }
 
-    public void stopMusic(String name) {
+    public void pauseMusic(String name) {
         if (audioCollection.containsKey(name)) {
-            audioCollection.get(name).stopAudio();
+            audioCollection.get(name).pauseAudio();
+        }
+    }
+
+    public void restartMusic(String name) {
+        if (audioCollection.containsKey(name)) {
+            audioCollection.get(name).restartAudio();
         }
     }
 
