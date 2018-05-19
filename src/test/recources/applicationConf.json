@@ -4,66 +4,67 @@
       "NFC_Ketel": {
         "SL": "41B96E3",
         "SH": "13A200",
+        "identifier": 2,
         "PC_Puzzle": [
           {
-            "start": {
-              "payload": 21,
+            "1": {
+              "name": "start",
               "type": "command"
             }
           },
           {
-            "stop": {
-              "payload": 22,
+            "2": {
+              "name": "stop",
               "type": "command"
             }
           },
           {
-            "reset": {
-              "payload": 23,
+            "3": {
+              "name": "reset",
               "type": "command"
             }
           },
           {
-            "finish": {
-              "payload": 24,
+            "4": {
+              "name": "finish",
               "type": "command"
             }
           },
           {
-            "test": {
-              "payload": 25,
+            "5": {
+              "name": "test",
               "type": "command"
             }
           }
         ],
         "Puzzle_PC": [
           {
-            "finished": {
-              "payload": 201,
+            "01": {
+              "name": "finished",
               "type": "status"
             }
           },
           {
-            "started": {
-              "payload": 202,
+            "02": {
+              "name": "started",
               "type": "status"
             }
           },
           {
-            "bubbelen": {
-              "payload": 211,
+            "11": {
+              "name": "bubbelen",
               "type": "sound"
             }
           },
           {
-            "correct_ingredienten": {
-              "payload": 212,
+            "12": {
+              "name": "correct_ingredienten",
               "type": "sound"
             }
           },
           {
-            "incorrect_ingredienten": {
-              "payload": 213,
+            "13": {
+              "name": "incorrect_ingredienten",
               "type": "sound"
             }
           }
@@ -74,48 +75,49 @@
       "LDR_Hitman_Pro": {
         "SL": "41B96DC",
         "SH": "13A200",
+        "identifier": 6,
         "PC_Puzzle": [
           {
-            "start": {
-              "payload": 61,
+            "1": {
+              "name": "start",
               "type": "command"
             }
           },
           {
-            "stop": {
-              "payload": 62,
+            "2": {
+              "name": "stop",
               "type": "command"
             }
           },
           {
-            "reset": {
-              "payload": 63,
+            "3": {
+              "name": "reset",
               "type": "command"
             }
           },
           {
-            "finish": {
-              "payload": 64,
+            "4": {
+              "name": "finish",
               "type": "command"
             }
           },
           {
-            "test": {
-              "payload": 65,
+            "5": {
+              "name": "test",
               "type": "command"
             }
           }
         ],
         "Puzzle_PC": [
           {
-            "finished": {
-              "payload": 601,
+            "01": {
+              "name": "finished",
               "type": "status"
             }
           },
           {
-            "started": {
-              "payload": 602,
+            "02": {
+              "name": "started",
               "type": "status"
             }
           }
@@ -124,48 +126,49 @@
       "Magnet_Canon": {
         "SL": "41B96E2",
         "SH": "13A200",
+        "identifier": 7,
         "PC_Puzzle": [
           {
-            "start": {
-              "payload": 71,
+            "1": {
+              "name": "start",
               "type": "command"
             }
           },
           {
-            "stop": {
-              "payload": 72,
+            "2": {
+              "name": "stop",
               "type": "command"
             }
           },
           {
-            "reset": {
-              "payload": 73,
+            "3": {
+              "name": "reset",
               "type": "command"
             }
           },
           {
-            "finish": {
-              "payload": 74,
+            "4": {
+              "name": "finish",
               "type": "command"
             }
           },
           {
-            "test": {
-              "payload": 75,
+            "5": {
+              "name": "test",
               "type": "command"
             }
           }
         ],
         "Puzzle_PC": [
           {
-            "finished": {
-              "payload": 701,
+            "01": {
+              "name": "finished",
               "type": "status"
             }
           },
           {
-            "started": {
-              "payload": 702,
+            "02": {
+              "name": "started",
               "type": "status"
             }
           }

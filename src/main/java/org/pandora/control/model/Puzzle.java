@@ -1,29 +1,28 @@
 package org.pandora.control.model;
 
-import org.pandora.control.model.state.PuzzleState;
-
+import lombok.Builder;
 import lombok.Data;
+import org.pandora.control.model.state.PuzzleState;
+import org.pandora.control.serialcomm.SerialInterpreter;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Data
+@Builder
 public class Puzzle {
 
 	private String name;
 	private String SL;
 	private String SH;
-	private List<Map<String, Operation>> PC_Puzzle;
-	private List<Map<String, Operation>> Puzzle_PC;
+	private Character identifier;
+	private Map<String, SerialInterpreter.Operation> PC_Puzzle;
+	private Map<String, SerialInterpreter.Operation> Puzzle_PC;
 	private PuzzleState puzzleState;
 
 	public Puzzle() {
 		puzzleState = PuzzleState.INIT;
 	}
 
-	private class Operation {
-		private String payload;
-		private String type;
-	}
+	public void
+
 }
