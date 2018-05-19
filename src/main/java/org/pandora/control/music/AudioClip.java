@@ -14,17 +14,17 @@ public class AudioClip implements LineListener {
     private Path path;
     private Boolean audioCompleted;
 
-    public AudioClip(Path path) {
+    AudioClip(Path path) {
         this.path = path;
         clipName = path.getFileName().toString();
         initialize();
     }
 
-    public void playAudio() {
+    void playAudio() {
         clip.start();
     }
 
-    public void stopAudio() {
+    void stopAudio() {
         clip.close();
     }
 

@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Slf4j
+@Component
 public class AudioManager {
 
     private Map<String, AudioClip> audioCollection = new HashMap<>();
@@ -45,8 +46,9 @@ public class AudioManager {
     private static String removeExtension(Path path) {
         String fileName = path.getFileName().toString();
         int pos = fileName.lastIndexOf(".");
-        if (pos == -1)
+        if (pos == -1) {
             return fileName;
+        }
 
         return fileName.substring(0, pos);
     }
