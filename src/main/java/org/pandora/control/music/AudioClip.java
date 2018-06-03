@@ -34,7 +34,7 @@ public class AudioClip implements LineListener {
         clip.stop();
         clip.close();
         try {
-            initialize();;
+            initialize();
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             log.error("Something went wrong restarting the audio");
         }

@@ -1,0 +1,128 @@
+{
+    "puzzles": [
+        {
+            "NFC_Ketel": {
+                "SL": "41B96E3",
+                "SH": "13A200",
+                "PC_Puzzle": {
+                    "start": {
+                        "payload": 21,
+                        "type": "command"
+                    },
+                    "stop": {
+                        "payload": 22,
+                        "type": "command"
+                    },
+                    "reset": {
+                        "payload": 23,
+                        "type": "command"
+                    },
+                    "finish": {
+                        "payload": 24,
+                        "type": "command"
+                    },
+                    "test": {
+                        "payload": 25,
+                        "type": "command"
+                    }
+                },
+                "Puzzle_PC": {
+                    "finished": {
+                        "payload": 201,
+                        "type": "status"
+                    },
+                    "started": {
+                        "payload": 202,
+                        "type": "status"
+                    },
+                    "bubbelen": {
+                        "payload": 211,
+                        "type": "sound"
+                    },
+                    "correct_ingredienten": {
+                        "payload": 212,
+                        "type": "sound"
+                    },
+                    "incorrect_ingredienten": {
+                        "payload": 213,
+                        "type": "sound"
+                    }
+                }
+            }
+        },
+        {
+            "LDR_Hitman_Pro": {
+                "SL": "41B96DC",
+                "SH": "13A200",
+                "PC_Puzzle": {
+                    "start": {
+                        "payload": 61,
+                        "type": "command"
+                    },
+                    "stop": {
+                        "payload": 62,
+                        "type": "command"
+                    },
+                    "reset": {
+                        "payload": 63,
+                        "type": "command"
+                    },
+                    "finish": {
+                        "payload": 64,
+                        "type": "command"
+                    },
+                    "test": {
+                        "payload": 65,
+                        "type": "command"
+                    }
+                },
+                "Puzzle_PC": {
+                    "finished": {
+                        "payload": 601,
+                        "type": "status"
+                    },
+                    "started": {
+                        "payload": 602,
+                        "type": "status"
+                    }
+                }
+            },
+            "Magnet_Canon": {
+                "SL": "41B96E2",
+                "SH": "13A200",
+                "PC_Puzzle": {
+                    "start": {
+                        "payload": 71,
+                        "type": "command"
+                    },
+                    "stop": {
+                        "payload": 72,
+                        "type": "command"
+                    },
+                    "reset": {
+                        "payload": 73,
+                        "type": "command"
+                    },
+                    "finish": {
+                        "payload": 74,
+                        "type": "command"
+                    },
+                    "test": {
+                        "payload": 75,
+                        "type": "command"
+                    }
+                },
+                "Puzzle_PC": {
+                    "finished": {
+                        "payload": 701,
+                        "type": "status"
+                    },
+                    "started": {
+                        "payload": 702,
+                        "type": "status"
+                    }
+                }
+            }
+        }
+    ]
+}
