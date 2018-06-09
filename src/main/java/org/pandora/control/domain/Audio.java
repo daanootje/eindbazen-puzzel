@@ -33,7 +33,6 @@ public class Audio {
             case restart:
                 audioManager.restartMusic(audioName);
                 break;
-            case resume:
         }
         return Response.accepted().build();
     }
