@@ -15,14 +15,18 @@ public class Puzzle {
 	private String SL;
 	private String SH;
 	private Character identifier;
-	private Map<String, SerialInterpreter.Operation> PC_Puzzle;
-	private Map<String, SerialInterpreter.Operation> Puzzle_PC;
+	private Map<String, Operation> PC_Puzzle;
+	private Map<String, Operation> Puzzle_PC;
 	private PuzzleState puzzleState;
 
 	public Puzzle() {
 		puzzleState = PuzzleState.INIT;
 	}
 
-	public void
+	@Data
+	public class Operation {
+		private String name;
+		private String type;
+	}
 
 }

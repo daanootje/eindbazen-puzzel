@@ -1,8 +1,11 @@
 package org.pandora.control.clock;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
+@Component
 public class CountDown {
 
     private Timer timer;

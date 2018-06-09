@@ -1,8 +1,11 @@
 package org.pandora.control.stateMachine.RoomSequence;
 
 import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.pandora.control.clock.CountDown;
+import org.pandora.control.model.Puzzle;
 import org.pandora.control.model.event.RoomEvent;
 import org.pandora.control.model.state.RoomState;
 import org.springframework.beans.factory.annotation.Autowired;
