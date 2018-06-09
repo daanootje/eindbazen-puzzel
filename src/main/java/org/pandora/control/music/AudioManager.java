@@ -36,6 +36,13 @@ public class AudioManager {
         }
     }
 
+    public void intializeAllMusic() {
+        audioCollection.values().forEach(audioClip -> {
+            audioClip.restartAudio();
+            audioClip.pauseAudio();
+        });
+    }
+
     public void playMusic(String name) {
         if (audioCollection.containsKey(name)) {
             audioCollection.get(name).playAudio();
@@ -64,7 +71,6 @@ public class AudioManager {
         if (pos == -1) {
             return fileName;
         }
-
         return fileName.substring(0, pos);
     }
 

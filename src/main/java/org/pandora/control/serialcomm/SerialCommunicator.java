@@ -37,7 +37,11 @@ public abstract class SerialCommunicator implements SerialPortEventListener {
 
     abstract public void serialEvent(SerialPortEvent evt);
 
-    public void initialize(String port) {
+    public void checkForSerialPorts() {
+        this.searchForPorts();
+    }
+
+    public void initializePort(String port) {
         try {
             this.connect(port);
             this.initIOStream();
@@ -55,7 +59,7 @@ public abstract class SerialCommunicator implements SerialPortEventListener {
         return portMap.keySet();
     }
 
-    public void writeData(String identifier, String serialMessage) {
+    public void writeData(char identifier, String serialMessage) {
         if (isConnected()) {
             try {
                 output.write(String.format("%s%s", identifier, serialMessage).getBytes());
