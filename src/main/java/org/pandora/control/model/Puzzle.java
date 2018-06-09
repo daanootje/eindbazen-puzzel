@@ -3,7 +3,6 @@ package org.pandora.control.model;
 import lombok.Builder;
 import lombok.Data;
 import org.pandora.control.model.state.PuzzleState;
-import org.pandora.control.serialcomm.SerialInterpreter;
 
 import java.util.Map;
 
@@ -27,6 +26,16 @@ public class Puzzle {
 	public class Operation {
 		private String name;
 		private String type;
+	}
+
+	public void applyPC_Puzzle(String operation) {
+		if (PC_Puzzle.containsKey(operation)) {
+			PC_Puzzle.get(operation)
+		}
+	}
+
+	public void applyPuzzle_PC() {
+
 	}
 
 }

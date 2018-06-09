@@ -38,4 +38,9 @@ public class Audio {
         return Response.accepted().build();
     }
 
+    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
+    public Response getAudio() {
+        return Response.ok().entity(audioManager.getAudioList()).build();
+    }
+
 }

@@ -10,7 +10,6 @@ import com.google.gson.reflect.TypeToken;
 import lombok.Data;
 import org.pandora.control.model.Puzzle;
 import org.pandora.control.model.state.PuzzleState;
-import org.pandora.control.serialcomm.SerialInterpreter;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -26,7 +25,7 @@ public class PuzzleManager {
     private Map<String,Puzzle> puzzleMap;
 
     public PuzzleManager() throws IOException {
-        URL url = SerialInterpreter.class.getResource("/applicationConf.json");
+        URL url = PuzzleManager.class.getResource("/applicationConf.json");
         String json = Resources.toString(url, Charsets.UTF_8);
         JsonObject jsonTree = new JsonParser().parse(json).getAsJsonObject();
         JsonArray array = jsonTree.getAsJsonArray("puzzles");
@@ -48,6 +47,10 @@ public class PuzzleManager {
 
     public Optional<Puzzle> getPuzzle(String name) {
         return Optional.ofNullable(puzzleMap.get(name));
+    }
+
+    public Map<String,Puzzle> getPuzzles() {
+        return puzzleMap;
     }
 
     private Puzzle convertToPuzzle(String name, DeserializePuzzle puzzle) {

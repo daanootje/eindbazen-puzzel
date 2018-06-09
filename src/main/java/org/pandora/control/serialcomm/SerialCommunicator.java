@@ -19,23 +19,23 @@ import java.util.Set;
 import java.util.TooManyListenersException;
 
 @Slf4j
-abstract class SerialCommunicator implements SerialPortEventListener {
+public abstract class SerialCommunicator implements SerialPortEventListener {
 
     private CommPortIdentifier selectedPortIdentifier;
     private SerialPort serialPort;
     private OutputStream output;
     private Map<String,CommPortIdentifier> portMap = new HashMap<>();
-    InputStream input;
+    private InputStream input;
 
     private Boolean connected = false;
     private final static Integer TIMEOUT = 2000;
-    private final static Integer SPACE_ASCII = 32;
-    private final static Integer DASH_ASCII = 45;
     private final static Integer NEW_LINE_ASCII = 10;
 
-    SerialCommunicator() {
+    public SerialCommunicator() {
         this.searchForPorts();
     }
+
+    abstract public void serialEvent(SerialPortEvent evt);
 
     public void initialize(String port) {
         try {
@@ -55,35 +55,24 @@ abstract class SerialCommunicator implements SerialPortEventListener {
         return portMap.keySet();
     }
 
-    public Boolean isConnected() {
-        return connected;
-    }
-
-    void writeData(int leftThrottle, int rightThrottle) {
+    public void writeData(String identifier, String serialMessage) {
         if (isConnected()) {
             try {
-                output.write(leftThrottle);
+                output.write(String.format("%s%s", identifier, serialMessage).getBytes());
                 output.flush();
 
-                output.write(DASH_ASCII);
-                output.flush();
-
-                output.write(rightThrottle);
-                output.flush();
-
-                output.write(SPACE_ASCII);
+                output.write(NEW_LINE_ASCII);
                 output.flush();
             } catch (IOException e) {
                 log.error(String.format("Failed to write data - %s", e.getMessage()));
             }
+        } else {
+            log.info("Serial port not connected");
         }
     }
 
-    abstract public void serialEvent(SerialPortEvent evt);
-
     public void disconnect() {
         try {
-            writeData(0, 0);
             serialPort.removeEventListener();
             serialPort.close();
             input.close();
@@ -92,6 +81,18 @@ abstract class SerialCommunicator implements SerialPortEventListener {
         } catch (IOException e) {
             log.error(String.format("Failed to close %s - %s", serialPort.getName(), e.getMessage()));
         }
+    }
+
+    public OutputStream getOutput() {
+        return output;
+    }
+
+    public InputStream getInput() {
+        return input;
+    }
+
+    private Boolean isConnected() {
+        return connected;
     }
 
     private void connect(String port) throws PortInUseException {
@@ -109,7 +110,6 @@ abstract class SerialCommunicator implements SerialPortEventListener {
     private void initIOStream() throws IOException {
         input = serialPort.getInputStream();
         output = serialPort.getOutputStream();
-        writeData(0, 0);
     }
 
     private void initListener() throws TooManyListenersException {
