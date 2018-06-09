@@ -1,8 +1,6 @@
 package org.pandora.control.stateMachine.RoomSequence;
 
 import gnu.io.SerialPortEvent;
-import lombok.EqualsAndHashCode;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.pandora.control.clock.CountDown;
 import org.pandora.control.model.Puzzle;
@@ -13,7 +11,6 @@ import org.pandora.control.music.AudioManager;
 import org.pandora.control.puzzle.PuzzleManager;
 import org.pandora.control.serialcomm.SerialCommunicator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.action.Action;
 import org.springframework.statemachine.config.StateMachineBuilder;
@@ -23,14 +20,14 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.EnumSet;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
-@EqualsAndHashCode(callSuper = false)
 @Component
-@Value
 @Slf4j
 public class RoomSM extends SerialCommunicator {
 
@@ -39,6 +36,9 @@ public class RoomSM extends SerialCommunicator {
 	private PuzzleManager puzzleManager;
 	private AudioManager audioManager;
 	private CountDown timeRemaining;
+
+	private Boolean started = false;
+	private Boolean reset = false;
 	
 	@Autowired
 	public RoomSM(CountDown timeRemaining, PuzzleManager puzzleManager, AudioManager audioManager) throws Exception {
@@ -49,25 +49,52 @@ public class RoomSM extends SerialCommunicator {
 		this.audioManager = audioManager;
 	}
 
-	public void resetSM() throws Exception {
-		EXECUTOR = Executors.newFixedThreadPool(10);
-		checkForSerialPorts();
-		stateMachine = buildMachine();
+	public void resetSM() {
+		try {
+			stopSM();
+			EXECUTOR = Executors.newFixedThreadPool(10);
+			checkForSerialPorts();
+			stateMachine = buildMachine();
+			reset = true;
+		} catch (Exception e) {
+			log.error(String.format("Something went wrong initializing statemachine - %s", e.getMessage()));
+		}
 	}
 
 	public void startPuzzles() {
-		stateMachine.sendEvent(RoomEvent.START);
+		if(started) {
+			stateMachine.sendEvent(RoomEvent.START);
+		}
 	}
 
-	public void startSM(String port) throws Exception {
-		initializePort(port);
-		stateMachine.start();
-		initPuzzles();
-		checkInitPuzzles().get(15, TimeUnit.MINUTES);
+	public void startSM(String port) {
+		if(reset) {
+			try {
+				initializePort(port);
+				stateMachine.start();
+				initPuzzles();
+				checkInitPuzzles().get(15, TimeUnit.MINUTES);
+				started = true;
+				reset = false;
+			} catch (InterruptedException | ExecutionException | TimeoutException e) {
+				log.error(String.format("Something went wrong starting statemachine - %s", e.getMessage()));
+			}
+		}
 	}
 
 	public void stopSM() {
 		stateMachine.stop();
+		started = false;
+	}
+
+	public void finishSM() {
+		finishPuzzles();
+		stateMachine.stop();
+		finalizeSM();
+	}
+
+	public RoomState getState() {
+		return stateMachine.getState().getId();
 	}
 	
 	private StateMachine<RoomState, RoomEvent> buildMachine() throws Exception {
@@ -102,6 +129,7 @@ public class RoomSM extends SerialCommunicator {
 			timeRemaining.pause();
 			log.info("Storing essential data");
 			storeData();
+			started = false;
 		};
 	}
 
@@ -143,7 +171,7 @@ public class RoomSM extends SerialCommunicator {
 	}
 
 	private void storeData() {
-
+		//TODO
 	}
 
 	private Future applyPuzzle_PC(byte identifier, String message) {
@@ -158,11 +186,18 @@ public class RoomSM extends SerialCommunicator {
 	}
 
 	private Future initPuzzles() {
-		return EXECUTOR.submit(() ->
-				puzzleManager.getPuzzles().values()
-					.forEach(puzzle ->
-						writeData(puzzle.getIdentifier(), puzzle.getPC_Puzzle().get("reset").getName())
-					));
+		return EXECUTOR.submit(() ->sendCommandToAllPuzzles("reset"));
+	}
+
+	private Future finishPuzzles() {
+		return EXECUTOR.submit(() -> sendCommandToAllPuzzles("finish"));
+	}
+
+	private void sendCommandToAllPuzzles(String command) {
+		puzzleManager.getPuzzles().values()
+				.forEach(puzzle ->
+						writeData(puzzle.getIdentifier(), puzzle.getPC_Puzzle().get(command).getName())
+				);
 	}
 
 	private Future checkInitPuzzles() {

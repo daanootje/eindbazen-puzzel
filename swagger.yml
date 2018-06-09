@@ -42,13 +42,6 @@ definitions:
         type: string
         enum: [start, stop, resume, restart]
 
-  RoomStatus:
-    type: object
-    properties:
-      status:
-        type: string
-        enum: [start, stop, resume, restart, finish]
-
   AudioStatus:
     type: object
     properties:
