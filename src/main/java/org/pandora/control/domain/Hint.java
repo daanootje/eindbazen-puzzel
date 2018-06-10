@@ -1,0 +1,9 @@
+package org.pandora.control.domain;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/puzzle")
+public class Hint {
+}

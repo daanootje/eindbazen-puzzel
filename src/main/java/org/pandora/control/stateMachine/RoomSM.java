@@ -1,7 +1,6 @@
 package org.pandora.control.stateMachine;
 
 import gnu.io.SerialPortEvent;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.pandora.control.clock.CountDown;
 import org.pandora.control.music.AudioManager;
@@ -17,19 +16,22 @@ import org.springframework.statemachine.config.StateMachineBuilder.Builder;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.HashSet;
 import java.util.Optional;
-import java.util.concurrent.*;
-import java.util.stream.Collectors;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
-@Component
 @Slf4j
+@Component
 @EnableStateMachineFactory
 public class RoomSM extends SerialCommunicator {
 
 	private ExecutorService EXECUTOR = Executors.newFixedThreadPool(10);
 	private StateMachine<String, String> stateMachine;
-	private LinkedList<State> puzzleSequence;
 	private PuzzleManager puzzleManager;
 	private AudioManager audioManager;
 	private CountDown timeRemaining;
@@ -101,7 +103,7 @@ public class RoomSM extends SerialCommunicator {
 	        .withStates()
 	        .initial("INIT")
 	        .end("FINISHED")
-	        .states(puzzleSequence.stream().map(State::getCurrent).collect(Collectors.toSet()));
+	        .states(new HashSet<>());
 
 	    builder.configureTransitions()
 		    .withExternal()
@@ -124,8 +126,6 @@ public class RoomSM extends SerialCommunicator {
 			disconnect();
 			log.info("Stop timer");
 			timeRemaining.pause();
-			log.info("Storing essential data");
-			storeData();
 			started = false;
 		};
 	}
@@ -165,10 +165,6 @@ public class RoomSM extends SerialCommunicator {
 				log.error("Failed to read incoming data - %s", e.getMessage());
 			}
 		}
-	}
-
-	private void storeData() {
-		//TODO
 	}
 
 	private Future applyPuzzle_PC(byte identifier, String message) {
@@ -211,14 +207,6 @@ public class RoomSM extends SerialCommunicator {
 			}
 			stateMachine.sendEvent("INITCHECK");
 		});
-	}
-
-	@Data
-	private class State {
-		private String current;
-		private String to;
-		private String event_trigger;
-		private String action;
 	}
 
 }

@@ -19,7 +19,7 @@ public class CountDown {
     	timeRemaining = startTimeInSeconds;
     	task = new TimerTask() {
             public void run() {
-            	reduceTime(1);
+            	reduceTime();
             }
         };
     }
@@ -47,11 +47,11 @@ public class CountDown {
 		resume();
 	}
 	
-	private final void reduceTime(int reduction) {
+	private final void reduceTime() {
 		if(timeRemaining <= 0) {
 			pause();
 		} else {
-			timeRemaining -= reduction;
+			timeRemaining -= 1;
 		}
 	}
     

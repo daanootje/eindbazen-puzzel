@@ -1,7 +1,6 @@
 package org.pandora.control.domain;
 
 import org.pandora.api.controller.model.AudioStatus;
-import org.pandora.api.controller.model.TimeStatus;
 import org.pandora.control.music.AudioManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;

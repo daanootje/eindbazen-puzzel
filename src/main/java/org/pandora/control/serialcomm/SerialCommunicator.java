@@ -21,7 +21,6 @@ import java.util.TooManyListenersException;
 @Slf4j
 public abstract class SerialCommunicator implements SerialPortEventListener {
 
-    private CommPortIdentifier selectedPortIdentifier;
     private SerialPort serialPort;
     private OutputStream output;
     private Map<String,CommPortIdentifier> portMap = new HashMap<>();
@@ -37,11 +36,11 @@ public abstract class SerialCommunicator implements SerialPortEventListener {
 
     abstract public void serialEvent(SerialPortEvent evt);
 
-    public void checkForSerialPorts() {
+    protected void checkForSerialPorts() {
         this.searchForPorts();
     }
 
-    public void initializePort(String port) {
+    protected void initializePort(String port) {
         try {
             this.connect(port);
             this.initIOStream();
@@ -59,7 +58,7 @@ public abstract class SerialCommunicator implements SerialPortEventListener {
         return portMap.keySet();
     }
 
-    public void writeData(char identifier, String serialMessage) {
+    protected void writeData(char identifier, String serialMessage) {
         if (isConnected()) {
             try {
                 output.write(String.format("%s%s", identifier, serialMessage).getBytes());
@@ -75,7 +74,7 @@ public abstract class SerialCommunicator implements SerialPortEventListener {
         }
     }
 
-    public void disconnect() {
+    protected void disconnect() {
         try {
             serialPort.removeEventListener();
             serialPort.close();
@@ -87,11 +86,7 @@ public abstract class SerialCommunicator implements SerialPortEventListener {
         }
     }
 
-    public OutputStream getOutput() {
-        return output;
-    }
-
-    public InputStream getInput() {
+    protected InputStream getInput() {
         return input;
     }
 
@@ -100,7 +95,7 @@ public abstract class SerialCommunicator implements SerialPortEventListener {
     }
 
     private void connect(String port) throws PortInUseException {
-        selectedPortIdentifier = portMap.get(port);
+        CommPortIdentifier selectedPortIdentifier = portMap.get(port);
         CommPort commPort;
         commPort = selectedPortIdentifier.open("TigerControlPanel", TIMEOUT);
         serialPort = (SerialPort)commPort;

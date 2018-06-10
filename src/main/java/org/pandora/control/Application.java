@@ -3,9 +3,16 @@ package org.pandora.control;
 
 import org.glassfish.jersey.server.ResourceConfig;
 import org.pandora.control.clock.CountDown;
+import org.pandora.control.domain.Audio;
+import org.pandora.control.domain.Hint;
+import org.pandora.control.domain.Log;
+import org.pandora.control.domain.Puzzle;
+import org.pandora.control.domain.Room;
 import org.pandora.control.domain.Time;
+import org.pandora.control.domain.WebSocketConfig;
 import org.pandora.control.music.AudioManager;
 import org.pandora.control.puzzle.PuzzleManager;
+import org.pandora.control.stateMachine.StateMachineFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -30,7 +37,7 @@ public class Application {
 
     @Bean
     public ResourceConfig jerseyConfig() {
-        return new ResourceConfig(Time.class);
+        return new ResourceConfig(Audio.class, Hint.class, Log.class, Puzzle.class, Room.class, Time.class, WebSocketConfig.class);
     }
 
     @Bean
@@ -47,4 +54,11 @@ public class Application {
     public PuzzleManager getPuzzleManager(AudioManager audioManager) throws IOException {
         return new PuzzleManager(audioManager, configFolder);
     }
+
+    @Bean
+    public StateMachineFactory getStateMachineConfig() {
+        return new StateMachineFactory(configFolder);
+    }
+
+
 }
