@@ -1,6 +1,6 @@
 package org.pandora.control.domain;
 
-import org.pandora.control.stateMachine.RoomSequence.RoomSM;
+import org.pandora.control.stateMachine.RoomSM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

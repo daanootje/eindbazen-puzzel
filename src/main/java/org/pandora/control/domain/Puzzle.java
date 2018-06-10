@@ -23,7 +23,7 @@ public class Puzzle {
     @RequestMapping(value = "/{puzzleName}", method = RequestMethod.GET, produces = "application/json")
     public Response getPuzzleState(@PathVariable String puzzleName) {
         return puzzleManager.getPuzzle(puzzleName)
-                .map(org.pandora.control.model.Puzzle::getPuzzleState)
+                .map(org.pandora.control.puzzle.Puzzle::getPuzzleState)
                 .map(Response::ok)
                 .orElse(Response.status(Response.Status.NOT_FOUND))
                 .build();
@@ -32,7 +32,7 @@ public class Puzzle {
     @RequestMapping(value = "/{puzzleName}/info", method = RequestMethod.GET, produces = "application/json")
     public Response getPuzzleStateInfo(@PathVariable String puzzleName) {
         return puzzleManager.getPuzzle(puzzleName)
-                .map(org.pandora.control.model.Puzzle::getStateInfo)
+                .map(org.pandora.control.puzzle.Puzzle::getStateInfo)
                 .map(Response::ok)
                 .orElse(Response.status(Response.Status.NOT_FOUND))
                 .build();

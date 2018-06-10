@@ -1,38 +1,35 @@
-package org.pandora.control.stateMachine.RoomSequence;
+package org.pandora.control.stateMachine;
 
 import gnu.io.SerialPortEvent;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.pandora.control.clock.CountDown;
-import org.pandora.control.model.Puzzle;
-import org.pandora.control.model.event.RoomEvent;
-import org.pandora.control.model.state.PuzzleState;
-import org.pandora.control.model.state.RoomState;
 import org.pandora.control.music.AudioManager;
+import org.pandora.control.puzzle.Puzzle;
 import org.pandora.control.puzzle.PuzzleManager;
 import org.pandora.control.serialcomm.SerialCommunicator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.action.Action;
+import org.springframework.statemachine.config.EnableStateMachineFactory;
 import org.springframework.statemachine.config.StateMachineBuilder;
 import org.springframework.statemachine.config.StateMachineBuilder.Builder;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.EnumSet;
+import java.util.LinkedList;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
+@EnableStateMachineFactory
 public class RoomSM extends SerialCommunicator {
 
 	private ExecutorService EXECUTOR = Executors.newFixedThreadPool(10);
-	private StateMachine<RoomState, RoomEvent> stateMachine;
+	private StateMachine<String, String> stateMachine;
+	private LinkedList<State> puzzleSequence;
 	private PuzzleManager puzzleManager;
 	private AudioManager audioManager;
 	private CountDown timeRemaining;
@@ -63,7 +60,7 @@ public class RoomSM extends SerialCommunicator {
 
 	public void startPuzzles() {
 		if(started) {
-			stateMachine.sendEvent(RoomEvent.START);
+			stateMachine.sendEvent("START");
 		}
 	}
 
@@ -93,31 +90,31 @@ public class RoomSM extends SerialCommunicator {
 		finalizeSM();
 	}
 
-	public RoomState getState() {
+	public String getState() {
 		return stateMachine.getState().getId();
 	}
 	
-	private StateMachine<RoomState, RoomEvent> buildMachine() throws Exception {
-	    Builder<RoomState, RoomEvent> builder = StateMachineBuilder.builder();
+	private StateMachine<String, String> buildMachine() throws Exception {
+	    Builder<String, String> builder = StateMachineBuilder.builder();
 
 	    builder.configureStates()
 	        .withStates()
-	        .initial(RoomState.INIT)
-	        .end(RoomState.FINISHED)
-	        .states(EnumSet.allOf(RoomState.class));
+	        .initial("INIT")
+	        .end("FINISHED")
+	        .states(puzzleSequence.stream().map(State::getCurrent).collect(Collectors.toSet()));
 
 	    builder.configureTransitions()
 		    .withExternal()
-		    .source(RoomState.INIT).target(RoomState.IDLE).event(RoomEvent.INITCHECK).and()
+		    .source("INIT").target("IDLE").event("INITCHECK").and()
 	        .withExternal()
-	        .source(RoomState.IDLE).target(RoomState.PUZZLES).event(RoomEvent.START).action(startRoom()).and()
+	        .source("IDLE").target("PUZZLES").event("START").action(startRoom()).and()
 	        .withExternal()
-	        .source(RoomState.PUZZLES).target(RoomState.FINISHED).event(RoomEvent.FINISH).action(finalizeSM());
+	        .source("PUZZLES").target("FINISHED").event("FINISH").action(finalizeSM());
 
 	    return builder.build();
 	}
 
-	private Action<RoomState, RoomEvent> finalizeSM() {
+	private Action<String, String> finalizeSM() {
 		return ctx -> {
 			log.info("Finalizing room");
 			EXECUTOR.shutdownNow();
@@ -133,7 +130,7 @@ public class RoomSM extends SerialCommunicator {
 		};
 	}
 
-	private Action<RoomState, RoomEvent> startRoom() {
+	private Action<String, String> startRoom() {
 		return ctx -> {
 			log.info("Starting timer");
 			timeRemaining.start();
@@ -193,10 +190,10 @@ public class RoomSM extends SerialCommunicator {
 		return EXECUTOR.submit(() -> sendCommandToAllPuzzles("finish"));
 	}
 
-	private void sendCommandToAllPuzzles(String command) {
+	private void sendCommandToAllPuzzles(String name) {
 		puzzleManager.getPuzzles().values()
-				.forEach(puzzle ->
-						writeData(puzzle.getIdentifier(), puzzle.getPC_Puzzle().get(command).getName())
+				.forEach(puzzle -> puzzle.getPC_PuzzleCommand(name)
+                        .ifPresent(s -> writeData(puzzle.getIdentifier(), s))
 				);
 	}
 
@@ -206,14 +203,22 @@ public class RoomSM extends SerialCommunicator {
 			while(!init) {
 				try {
 					init = puzzleManager.getPuzzles().values().stream()
-							.allMatch(puzzle -> puzzle.getPuzzleState() == PuzzleState.STOPPED);
+							.allMatch(puzzle -> puzzle.getPuzzleState().equals("stopped"));
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
-			stateMachine.sendEvent(RoomEvent.INITCHECK);
+			stateMachine.sendEvent("INITCHECK");
 		});
+	}
+
+	@Data
+	private class State {
+		private String current;
+		private String to;
+		private String event_trigger;
+		private String action;
 	}
 
 }

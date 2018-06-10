@@ -1,0 +1,23 @@
+{
+  "sequence": [
+    {
+      "S0": {
+        "current": "START",
+        "to": "Puzzle1",
+        "event_trigger": "E0",
+        "action": "A0"
+      },
+      "S1": {
+        "current": "Puzzle1",
+        "to": "Puzzle2",
+        "event_trigger": "E1"
+      },
+      "S2": {
+        "current": "Puzzle2",
+        "to": "FINISH",
+        "event_trigger": "E2",
+        "action": "A2"
+      }
+    }
+  ]
+}

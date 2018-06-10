@@ -8,8 +8,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import lombok.Data;
-import org.pandora.control.model.Puzzle;
-import org.pandora.control.model.state.PuzzleState;
+import org.pandora.control.music.AudioManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -19,13 +19,18 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.pandora.control.util.Deserializer.flattenMap;
+
 @Component
 public class PuzzleManager {
 
     private Map<String,Puzzle> puzzleMap;
+    private AudioManager audioManager;
 
-    public PuzzleManager() throws IOException {
-        URL url = PuzzleManager.class.getResource("/applicationConf.json");
+    @Autowired
+    public PuzzleManager(AudioManager audioManager) throws IOException {
+        this.audioManager = audioManager;
+        URL url = PuzzleManager.class.getResource("/puzzlesConf.json");
         String json = Resources.toString(url, Charsets.UTF_8);
         JsonObject jsonTree = new JsonParser().parse(json).getAsJsonObject();
         JsonArray array = jsonTree.getAsJsonArray("puzzles");
@@ -55,19 +60,16 @@ public class PuzzleManager {
 
     private Puzzle convertToPuzzle(String name, DeserializePuzzle puzzle) {
         return Puzzle.builder()
+                .audioManager(audioManager)
                 .identifier(puzzle.identifier)
                 .name(name)
                 .SH(puzzle.SH)
                 .SL(puzzle.SL)
+                .puzzleState("init")
+                .stateInfo("initializing puzzle")
                 .PC_Puzzle(flattenMap(puzzle.PC_Puzzle))
                 .Puzzle_PC(flattenMap(puzzle.Puzzle_PC))
                 .build();
-    }
-
-    private <T> Map<String,T> flattenMap(List<Map<String,T>> nestedMap) {
-        return nestedMap.stream()
-                .flatMap(map -> map.entrySet().stream())
-                .collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue));
     }
 
     @Data
@@ -78,7 +80,7 @@ public class PuzzleManager {
         private Character identifier;
         private List<Map<String, Puzzle.Operation>> PC_Puzzle;
         private List<Map<String, Puzzle.Operation>> Puzzle_PC;
-        private PuzzleState puzzleState;
+        private String puzzleState;
     }
 
 }
