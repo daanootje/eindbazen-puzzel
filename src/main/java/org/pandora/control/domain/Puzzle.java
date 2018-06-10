@@ -20,6 +20,11 @@ public class Puzzle {
         this.puzzleManager = puzzleManager;
     }
 
+    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
+    public Response getPuzzleNames() {
+        return Response.ok().entity(puzzleManager.getPuzzles().keySet()).build();
+    }
+
     @RequestMapping(value = "/{puzzleName}", method = RequestMethod.GET, produces = "application/json")
     public Response getPuzzleState(@PathVariable String puzzleName) {
         return puzzleManager.getPuzzle(puzzleName)

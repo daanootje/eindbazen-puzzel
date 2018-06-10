@@ -1,0 +1,157 @@
+swagger: '2.0'
+info:
+  version: "1.0"
+  title: Pandora Puzzle
+schemes:
+  - http
+produces:
+  - application/json
+consumes:
+  - application/json
+paths:
+  /time:
+    post:
+      summary: Start, stop or restart time (default is 3600 seconds)
+      consumes:
+        - application/json
+          type: string
+          enum: [start, stop, resume, restart]
+      responses:
+        201:
+          description: Applied
+  /time/remaining:
+    websocket:
+      summary: Websocket to retrieve time
+      responses:
+        Integer:
+          description: time
+
+  /audio:
+    get:
+      summary: Get all audio items listed in the respective folder
+      produces:
+        - application/json
+          type: array
+            items:
+              type: string
+      responses:
+        200:
+          description: ok
+  /audio/{name}:
+    post:
+      summary: Play, pause or restart audio
+      path:
+        name:
+          type: string
+          description: name of the respective audio file
+      consumes:
+        - application/json
+          type: string
+          enum: [play, pause, restart]
+      responses:
+        201:
+          description: Applied
+
+  /puzzle:
+    get:
+      summary: Get all the puzzle names
+      produces:
+        - application/json
+          type: array
+            items:
+              type: string
+      responses:
+        200:
+          description: ok
+  /puzzle/{name}:
+    get:
+      summary: Get the state of a puzzle
+      path:
+        name:
+          type: string
+          description: name of the respective puzzle
+      produces:
+        - application/json
+          type: string
+      responses:
+        200:
+          description: ok
+  /puzzle/{name}/info:
+    get:
+      summary: Get additional info of the state of a puzzle
+      path:
+        name:
+          type: string
+          description: name of the respective puzzle
+      produces:
+        - application/json
+          type: string
+      responses:
+        200:
+          description: ok
+
+  /room/start:
+    post:
+      summary: Start state machine
+      consumes:
+        - application/json
+          description: something random string
+      responses:
+        201:
+          description: Applied
+  /room/stop:
+    post:
+      summary: Stop state machine
+      consumes:
+        - application/json
+          description: something random string
+      responses:
+        201:
+          description: Applied
+  /room/reset:
+    post:
+      summary: Reset state machine
+      consumes:
+        - application/json
+          description: something random string
+      responses:
+        201:
+          description: Applied
+  /room/finish:
+    post:
+      summary: Finish state machine
+      consumes:
+        - application/json
+          description: something random string
+      responses:
+        201:
+          description: Applied
+  /room/puzzles/start:
+    post:
+      summary: Start puzzles, followed by the initializing of them
+      consumes:
+        - application/json
+          description: something random string
+      responses:
+        201:
+          description: Applied
+  /room/state:
+    get:
+      summary: Get current state of state machine
+      produces:
+        - application/json
+          type: string
+      responses:
+        200:
+          description: ok
+  /room/ports:
+    post:
+      summary: Get all ports available for serial communication
+      produces:
+        - application/json
+          type: array
+            items:
+              type: string
+      responses:
+        200:
+          description: ok
