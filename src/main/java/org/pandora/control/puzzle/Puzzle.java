@@ -46,7 +46,7 @@ public class Puzzle {
 
 	public Optional<String> getPC_PuzzleCommand(String name) {
 		return PC_Puzzle.entrySet().stream()
-				.filter(entry -> entry.getValue().getName().equals(name))
+				.filter(entry -> entry.getValue().getName().equals(name) && entry.getValue().getType().equals("command"))
 				.findAny()
 				.map(Map.Entry::getKey);
 	}
