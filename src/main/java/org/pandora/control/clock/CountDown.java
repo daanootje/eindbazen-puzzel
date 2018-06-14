@@ -1,11 +1,8 @@
 package org.pandora.control.clock;
 
-import org.springframework.stereotype.Component;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
-@Component
 public class CountDown {
 
     private Timer timer;
@@ -13,7 +10,7 @@ public class CountDown {
     private Integer maxTime;
 	private TimerTask task;
     
-    public CountDown(int startTimeInSeconds) {
+    public CountDown(Integer startTimeInSeconds) {
     	timer = new Timer();
     	maxTime = startTimeInSeconds;
     	timeRemaining = startTimeInSeconds;
@@ -31,7 +28,11 @@ public class CountDown {
 	public Integer getRemainingTimeInSeconds() {
 		return timeRemaining;
 	}
-	
+
+	public Integer getElapsedTime() {
+    	return maxTime - timeRemaining;
+	}
+
 	public void pause() {
 		timer.cancel();
 	}

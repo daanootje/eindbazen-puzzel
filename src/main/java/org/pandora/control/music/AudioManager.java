@@ -1,7 +1,6 @@
 package org.pandora.control.music;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -14,7 +13,6 @@ import java.util.Map;
 import java.util.Set;
 
 @Slf4j
-@Component
 public class AudioManager {
 
     private Map<String, AudioClip> audioCollection = new HashMap<>();

@@ -65,6 +65,7 @@ public class Puzzle {
 				case "info":
 					setStateInfo(name);
 					break;
+
 			}
 		}
 	}

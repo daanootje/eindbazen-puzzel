@@ -90,7 +90,7 @@ public abstract class SerialCommunicator implements SerialPortEventListener {
         return input;
     }
 
-    private Boolean isConnected() {
+    protected Boolean isConnected() {
         return connected;
     }
 

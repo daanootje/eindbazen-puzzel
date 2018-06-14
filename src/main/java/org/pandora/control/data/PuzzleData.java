@@ -9,7 +9,7 @@ public class PuzzleData {
 
     private String name;
     private Integer duration;
-    private String hints;
+    private Integer hints;
     private Boolean succeeded;
 
 }

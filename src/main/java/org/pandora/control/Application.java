@@ -3,6 +3,7 @@ package org.pandora.control;
 
 import org.glassfish.jersey.server.ResourceConfig;
 import org.pandora.control.clock.CountDown;
+import org.pandora.control.data.DataManager;
 import org.pandora.control.domain.Audio;
 import org.pandora.control.domain.Hint;
 import org.pandora.control.domain.Log;
@@ -12,7 +13,6 @@ import org.pandora.control.domain.Time;
 import org.pandora.control.domain.WebSocketConfig;
 import org.pandora.control.music.AudioManager;
 import org.pandora.control.puzzle.PuzzleManager;
-import org.pandora.control.stateMachine.StateMachineFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -30,6 +30,9 @@ public class Application {
 
     @Value( "${config.location}" )
     private String configFolder;
+
+    @Value( "${log.location}" )
+    private String logFolder;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -51,14 +54,22 @@ public class Application {
     }
 
     @Bean
-    public PuzzleManager getPuzzleManager(AudioManager audioManager) throws IOException {
-        return new PuzzleManager(audioManager, configFolder);
+    public DataManager getDataManager() {
+        return new DataManager(logFolder);
     }
 
     @Bean
-    public StateMachineFactory getStateMachineConfig() {
-        return new StateMachineFactory(configFolder);
+    public PuzzleManager getPuzzleManager(AudioManager audioManager, String folder) throws IOException {
+        return new PuzzleManager(audioManager, folder);
     }
 
+    @Bean
+    public String getConfig(){
+        return configFolder;
+    }
 
+//    @Bean
+//    public RoomSM getRoomSM(CountDown countDown, AudioManager audioManager, HintManager hintManager, ) throws Exception {
+//        return new RoomSM(countDown, audioManager, hintManager, configFolder);
+//    }
 }

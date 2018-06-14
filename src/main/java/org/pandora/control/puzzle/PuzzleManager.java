@@ -8,7 +8,6 @@ import com.google.gson.reflect.TypeToken;
 import lombok.Data;
 import org.pandora.control.music.AudioManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -19,7 +18,6 @@ import java.util.stream.Collectors;
 
 import static org.pandora.control.util.Deserializer.flattenMap;
 
-@Component
 public class PuzzleManager {
 
     private Map<String,Puzzle> puzzleMap;
@@ -28,8 +26,8 @@ public class PuzzleManager {
     @Autowired
     public PuzzleManager(AudioManager audioManager, String configFolder) throws IOException {
         this.audioManager = audioManager;
-        String fileName = String.format("%s/puzzlesConf.json", configFolder);
-        puzzleMap = parseConf(fileName);
+//        String fileName = String.format("%s/puzzlesConf.json", configFolder);
+//        puzzleMap = parseConf(fileName);
     }
 
     public Optional<Puzzle> getPuzzle(byte identifier) {

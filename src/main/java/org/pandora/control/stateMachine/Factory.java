@@ -1,6 +1,8 @@
 package org.pandora.control.stateMachine;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
 import org.springframework.statemachine.config.EnableStateMachine;
 import org.springframework.statemachine.config.StateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.builders.StateMachineModelConfigurer;
@@ -9,13 +11,10 @@ import org.springframework.statemachine.uml.UmlStateMachineModelFactory;
 
 @Configuration
 @EnableStateMachine
-public class StateMachineFactory extends StateMachineConfigurerAdapter<String, String> {
+public class Factory extends StateMachineConfigurerAdapter<String, String> {
 
-    private String fileName;
-
-    public StateMachineFactory(String configFolder) {
-        fileName = String.format("%s/state-machine.uml", configFolder);
-    }
+    @Value(value = "classpath:statemachine.uml")
+    private Resource location;
 
     @Override
     public void configure(StateMachineModelConfigurer<String, String> model) throws Exception {
@@ -25,7 +24,7 @@ public class StateMachineFactory extends StateMachineConfigurerAdapter<String, S
     }
 
     private StateMachineModelFactory<String, String> modelFactory() {
-        return new UmlStateMachineModelFactory(fileName);
+        return new UmlStateMachineModelFactory(location);
     }
 
 }

@@ -1,7 +1,6 @@
 package org.pandora.control.data;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,7 +15,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-@Component
 @Slf4j
 public class DataManager {
 
