@@ -23,20 +23,23 @@ public class Puzzle {
 	private String stateInfo;
 
 	@Data
-	public class Operation {
+	class Operation {
 		private String name;
 		private String type;
 	}
 
-	public synchronized void setPuzzleState(String puzzleState) {
-		this.puzzleState = puzzleState;
+	private synchronized void setPuzzleState(String puzzleState) {
+		Puzzle_PC.values().stream()
+				.filter(operation -> operation.getName().equals(puzzleState))
+				.findAny()
+				.ifPresent(operation -> this.puzzleState = puzzleState);
 	}
 
 	public synchronized String getPuzzleState() {
 		return puzzleState;
 	}
 
-	public synchronized void setStateInfo(String stateInfo) {
+	private synchronized void setStateInfo(String stateInfo) {
 		this.stateInfo = stateInfo;
 	}
 

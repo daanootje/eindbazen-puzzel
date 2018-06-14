@@ -2,6 +2,7 @@ package org.pandora.control.domain;
 
 import org.pandora.control.clock.CountDown;
 import org.pandora.control.data.DataManager;
+import org.pandora.control.data.PuzzleData;
 import org.pandora.control.stateMachine.RoomSM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/log")
@@ -30,7 +32,7 @@ public class Log {
     @RequestMapping(value = "/store", method = RequestMethod.POST, consumes = "application/json")
     public Response storeData(@RequestBody String groupName) {
         if (roomSM.getFinished()) {
-            dataManager.storeData(groupName, roomSM.getPuzzleData(), countDown.getRemainingTimeInSeconds(), roomSM.getSucceeded());
+            dataManager.storeData(groupName, new ArrayList<>(roomSM.getPuzzleData().values()), countDown.getRemainingTimeInSeconds(), roomSM.getSucceeded());
         }
         return Response.accepted().build();
     }

@@ -26,8 +26,8 @@ public class PuzzleManager {
     @Autowired
     public PuzzleManager(AudioManager audioManager, String configFolder) throws IOException {
         this.audioManager = audioManager;
-//        String fileName = String.format("%s/puzzlesConf.json", configFolder);
-//        puzzleMap = parseConf(fileName);
+        String fileName = String.format("%s/puzzlesConf.json", configFolder);
+        puzzleMap = parseConf(fileName);
     }
 
     public Optional<Puzzle> getPuzzle(byte identifier) {

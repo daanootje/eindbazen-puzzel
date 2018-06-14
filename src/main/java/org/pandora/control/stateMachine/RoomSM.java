@@ -15,8 +15,8 @@ import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -42,7 +42,7 @@ public class RoomSM extends SerialCommunicator {
 	private Boolean started = false;
 	private Boolean reset = true;
 
-	private List<PuzzleData> puzzlesData = new ArrayList<>();
+	private Map<String, PuzzleData> puzzlesData = new HashMap<>();
 	private Integer duration;
 	private Boolean succeeded;
 
@@ -55,7 +55,7 @@ public class RoomSM extends SerialCommunicator {
 		this.hintManager = hintManager;
 	}
 
-	public List<PuzzleData> getPuzzleData() {
+	public Map<String, PuzzleData> getPuzzleData() {
 		return puzzlesData;
 	}
 
@@ -123,16 +123,23 @@ public class RoomSM extends SerialCommunicator {
 		return stateMachine.getState().getId();
 	}
 
-	public void finishPuzzle(String puzzleName, Boolean succeeded) {
-		duration = timeRemaining.getElapsedTime() - duration;
-		PuzzleData puzzleData = PuzzleData.builder()
+	public void setPuzzleState(String puzzleName, String state) {
+		sendCommandToPuzzle(puzzleName, state);
+		if (state.equals("finish") && puzzleManager.getPuzzle(puzzleName).isPresent()) {
+			puzzlesData.put(puzzleName, PuzzleData.builder().succeeded(false).build());
+		}
+	}
+
+	private void finishPuzzle(String puzzleName) {
+		PuzzleData.PuzzleDataBuilder puzzleData = PuzzleData.builder()
 				.name(puzzleName)
 				.duration(duration)
-				.hints(hintManager.getNumberOfHints(puzzleName))
-				.succeeded(succeeded)
-				.build();
-
-		puzzlesData.add(puzzleData);
+				.hints(hintManager.getNumberOfHints(puzzleName));
+		duration = timeRemaining.getElapsedTime() - duration; asd is not right with splitting states //TODO finish puzzle when from serial
+		if (!puzzlesData.containsKey(puzzleName)) {
+			puzzleData.succeeded(true);
+		}
+		puzzlesData.put(puzzleName, puzzleData.build());
 	}
 
 	private Action<String, String> finalizeSM() {
@@ -209,6 +216,14 @@ public class RoomSM extends SerialCommunicator {
 
 	private Future finishPuzzles() {
 		return EXECUTOR.submit(() -> sendCommandToAllPuzzles("finish"));
+	}
+
+	private Future sendCommandToPuzzle(String puzzleName, String name) {
+		return EXECUTOR.submit(() ->puzzleManager.getPuzzle(puzzleName)
+				.ifPresent(puzzle -> puzzle.getPC_PuzzleCommand(name)
+								.ifPresent(s -> writeData(puzzle.getIdentifier(), s))
+				)
+		);
 	}
 
 	private void sendCommandToAllPuzzles(String name) {
