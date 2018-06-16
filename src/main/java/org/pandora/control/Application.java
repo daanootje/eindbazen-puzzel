@@ -18,6 +18,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.io.IOException;
 
@@ -59,17 +60,8 @@ public class Application {
     }
 
     @Bean
-    public PuzzleManager getPuzzleManager(AudioManager audioManager, String folder) throws IOException {
-        return new PuzzleManager(audioManager, folder);
+    public PuzzleManager getPuzzleManager(AudioManager audioManager) throws IOException {
+        return new PuzzleManager(audioManager, configFolder);
     }
 
-    @Bean
-    public String getConfig(){
-        return configFolder;
-    }
-
-//    @Bean
-//    public RoomSM getRoomSM(CountDown countDown, AudioManager audioManager, HintManager hintManager, ) throws Exception {
-//        return new RoomSM(countDown, audioManager, hintManager, configFolder);
-//    }
 }

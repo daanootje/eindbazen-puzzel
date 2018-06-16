@@ -16,17 +16,11 @@ public class Puzzle {
 	private String name;
 	private String SL;
 	private String SH;
-	private Character identifier;
+	private String identifier;
 	private Map<String, Operation> PC_Puzzle;
 	private Map<String, Operation> Puzzle_PC;
 	private String puzzleState;
 	private String stateInfo;
-
-	@Data
-	class Operation {
-		private String name;
-		private String type;
-	}
 
 	private synchronized void setPuzzleState(String puzzleState) {
 		Puzzle_PC.values().stream()
@@ -54,7 +48,7 @@ public class Puzzle {
 				.map(Map.Entry::getKey);
 	}
 
-	public void apply(String message) {
+	public String apply(String message) {
 		if(Puzzle_PC.containsKey(message)) {
 			String name = Puzzle_PC.get(message).getName();
 			String type = Puzzle_PC.get(message).getType();
@@ -70,7 +64,9 @@ public class Puzzle {
 					break;
 
 			}
+			return name;
 		}
+		return message;
 	}
 
 }

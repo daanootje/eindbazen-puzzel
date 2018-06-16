@@ -1,15 +1,12 @@
 package org.pandora.control.puzzle;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
+import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.javatuples.Pair;
 import org.pandora.control.music.AudioManager;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.FileReader;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -18,69 +15,72 @@ import java.util.stream.Collectors;
 
 import static org.pandora.control.util.Deserializer.flattenMap;
 
+@Slf4j
 public class PuzzleManager {
 
     private Map<String,Puzzle> puzzleMap;
-    private AudioManager audioManager;
 
-    @Autowired
     public PuzzleManager(AudioManager audioManager, String configFolder) throws IOException {
-        this.audioManager = audioManager;
-        String fileName = String.format("%s/puzzlesConf.json", configFolder);
-        puzzleMap = parseConf(fileName);
+        puzzleMap = parseConf(audioManager, String.format("%s/puzzlesConf.json", configFolder));
     }
 
-    public Optional<Puzzle> getPuzzle(byte identifier) {
-        if(identifier == 0) {
-            return Optional.empty();
-        } else {
-            return puzzleMap.values().stream()
-                    .filter(puzzle -> puzzle.getIdentifier() == (char)identifier)
-                    .findFirst();
-        }
+    private Optional<Puzzle> getPuzzle(String identifier) {
+        return puzzleMap.values().stream()
+                .filter(puzzle -> puzzle.getIdentifier().equals(identifier))
+                .findFirst();
     }
 
-    public Optional<Puzzle> getPuzzle(String name) {
-        return Optional.ofNullable(puzzleMap.get(name));
+    public Optional<String> getPuzzleState(String puzzleName) {
+        return Optional.ofNullable(puzzleMap.get(puzzleName))
+                .map(Puzzle::getPuzzleState);
     }
 
-    public Map<String,Puzzle> getPuzzles() {
+    public Optional<String> getPuzzleStateInfo(String puzzleName) {
+        return Optional.ofNullable(puzzleMap.get(puzzleName))
+                .map(Puzzle::getStateInfo);
+    }
+
+    public Boolean isPresent(String puzzleName) {
+        return puzzleMap.containsKey(puzzleName);
+    }
+
+  public Map<String,Puzzle> getPuzzles() {
         return puzzleMap;
     }
 
-    private Puzzle convertToPuzzle(String name, DeserializePuzzle puzzle) {
+    public Optional<Pair<String, String>> getPC_PuzzleCommand(String puzzleName, String name) {
+        return Optional.ofNullable(puzzleMap.get(puzzleName))
+                .map(puzzle -> {
+                    Optional<String> command = puzzle.getPC_PuzzleCommand(name);
+                    return command.map(s -> new Pair<>(puzzle.getIdentifier(), s)).orElse(null);
+                });
+    }
+
+    public Optional<Pair<String, String>> applyToPuzzle(String puzzleID, String message) {
+        return this.getPuzzle(puzzleID)
+                .map(puzzle -> new Pair<>(puzzle.getName(), puzzle.apply(message)));
+    }
+
+    private Puzzle convertToPuzzle(String name, DeserializePuzzle puzzle, AudioManager audioManager) {
         return Puzzle.builder()
                 .audioManager(audioManager)
-                .identifier(puzzle.identifier)
+                .identifier(puzzle.getIdentifier())
                 .name(name)
-                .SH(puzzle.SH)
-                .SL(puzzle.SL)
+                .SH(puzzle.getSH())
+                .SL(puzzle.getSL())
                 .puzzleState("init")
                 .stateInfo("initializing puzzle")
-                .PC_Puzzle(flattenMap(puzzle.PC_Puzzle))
-                .Puzzle_PC(flattenMap(puzzle.Puzzle_PC))
+                .PC_Puzzle(flattenMap(puzzle.getPC_Puzzle()))
+                .Puzzle_PC(flattenMap(puzzle.getPuzzle_PC()))
                 .build();
     }
 
-    @Data
-    private class DeserializePuzzle {
-        private String name;
-        private String SL;
-        private String SH;
-        private Character identifier;
-        private List<Map<String, Puzzle.Operation>> PC_Puzzle;
-        private List<Map<String, Puzzle.Operation>> Puzzle_PC;
-        private String puzzleState;
-    }
-
-    private Map<String,Puzzle> parseConf(String fileName) throws IOException {
-        String json = new Gson().toJson(new FileReader(fileName));
-        JsonObject jsonTree = new JsonParser().parse(json).getAsJsonObject();
-        JsonArray array = jsonTree.getAsJsonArray("puzzles");
-        List<Map<String,DeserializePuzzle>> list = new Gson().fromJson(array,
-                new TypeToken<List<Map<String,DeserializePuzzle>>>(){}.getType());
+    private Map<String,Puzzle> parseConf(AudioManager audioManager, String configFolder) throws IOException {
+        com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+        List<Map<String,DeserializePuzzle>> list = mapper.readValue(new File(configFolder),
+                new TypeReference<List<Map<String,DeserializePuzzle>>>(){});
         return flattenMap(list).entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, e -> convertToPuzzle(e.getKey(), e.getValue())));
-    }
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> convertToPuzzle(e.getKey(), e.getValue(), audioManager)));
 
+    }
 }

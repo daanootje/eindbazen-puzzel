@@ -1,8 +1,13 @@
 package org.pandora.control.stateMachine;
 
 import gnu.io.SerialPortEvent;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.pandora.control.clock.CountDown;
+import org.pandora.control.data.DataManager;
+import org.pandora.control.data.DataObject;
 import org.pandora.control.data.PuzzleData;
 import org.pandora.control.hints.HintManager;
 import org.pandora.control.music.AudioManager;
@@ -10,23 +15,28 @@ import org.pandora.control.puzzle.Puzzle;
 import org.pandora.control.puzzle.PuzzleManager;
 import org.pandora.control.serialcomm.SerialCommunicator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 @Slf4j
 @Component
+@EnableScheduling
 public class RoomSM extends SerialCommunicator {
 
 	@Autowired
@@ -34,33 +44,30 @@ public class RoomSM extends SerialCommunicator {
 
 	private ExecutorService EXECUTOR = Executors.newFixedThreadPool(10);
 	private PuzzleManager puzzleManager;
-	private AudioManager audioManager;
 	private CountDown timeRemaining;
 	private HintManager hintManager;
+	private DataManager dataManager;
+	private AudioManager audioManager;
 
 	private Boolean finished = false;
 	private Boolean started = false;
 	private Boolean reset = true;
 
+	private StringBuilder bufferIncoming = new StringBuilder();
+	private Queue<Package> queue = new LinkedList<>();
+
 	private Map<String, PuzzleData> puzzlesData = new HashMap<>();
 	private Integer duration;
-	private Boolean succeeded;
+	private Boolean succeeded = false;
 
 	@Autowired
-	public RoomSM(CountDown timeRemaining, AudioManager audioManager, PuzzleManager puzzleManager, HintManager hintManager) {
+	public RoomSM(CountDown timeRemaining, HintManager hintManager, AudioManager audioManager, PuzzleManager puzzleManager, DataManager dataManager) throws Exception{
 		super();
 		this.timeRemaining = timeRemaining;
 		this.puzzleManager = puzzleManager;
-		this.audioManager = audioManager;
 		this.hintManager = hintManager;
-	}
-
-	public Map<String, PuzzleData> getPuzzleData() {
-		return puzzlesData;
-	}
-
-	public Boolean getSucceeded() {
-		return succeeded;
+		this.dataManager = dataManager;
+		this.audioManager = audioManager;
 	}
 
 	public Boolean getFinished() {
@@ -74,6 +81,8 @@ public class RoomSM extends SerialCommunicator {
 			checkForSerialPorts();
 			stateMachine.stop();
 			stateMachine.start();
+			bufferIncoming = new StringBuilder();
+			queue = new PriorityQueue();
 			reset = true;
 		} catch (Exception e) {
 			log.error(String.format("Something went wrong initializing statemachine - %s", e.getMessage()));
@@ -88,21 +97,14 @@ public class RoomSM extends SerialCommunicator {
 
 	public void startSM(String port) {
 		if(reset) {
-			if(isConnected()) {
-				try {
-					initializePort(port);
-					stateMachine.start();
-					initPuzzles();
-					checkInitPuzzles().get(15, TimeUnit.MINUTES);
-					finished = false;
-					started = true;
-					reset = false;
-				} catch (InterruptedException | ExecutionException | TimeoutException e) {
-					log.error(String.format("Something went wrong starting statemachine - %s", e.getMessage()));
-				}
-			} else {
-				log.info("Serial port is not connected");
-			}
+			duration = timeRemaining.getElapsedTime();
+			initializePort(port);
+			stateMachine.start();
+			initPuzzles();
+			checkInitPuzzles();
+			finished = false;
+			started = true;
+			reset = false;
 		}
 	}
 
@@ -125,7 +127,7 @@ public class RoomSM extends SerialCommunicator {
 
 	public void setPuzzleState(String puzzleName, String state) {
 		sendCommandToPuzzle(puzzleName, state);
-		if (state.equals("finish") && puzzleManager.getPuzzle(puzzleName).isPresent()) {
+		if (state.equals("finish") && puzzleManager.isPresent(puzzleName)) {
 			puzzlesData.put(puzzleName, PuzzleData.builder().succeeded(false).build());
 		}
 	}
@@ -135,7 +137,7 @@ public class RoomSM extends SerialCommunicator {
 				.name(puzzleName)
 				.duration(duration)
 				.hints(hintManager.getNumberOfHints(puzzleName));
-		duration = timeRemaining.getElapsedTime() - duration; asd is not right with splitting states //TODO finish puzzle when from serial
+//		duration = timeRemaining.getElapsedTime() - duration; asd is not right with splitting states
 		if (!puzzlesData.containsKey(puzzleName)) {
 			puzzleData.succeeded(true);
 		}
@@ -174,40 +176,64 @@ public class RoomSM extends SerialCommunicator {
 	@Override
 	public void serialEvent(SerialPortEvent evt) {
 		if (evt.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
-			byte[] aReceiveBuffer = new byte[5];
+			log.info("RECEIVED DATA");
 			try {
-				getInput().read(aReceiveBuffer,0,5);
-				byte id = aReceiveBuffer[0];
-				char c;
-				byte b;
-				StringBuilder s = new StringBuilder();
-				for(int i = 1; i < aReceiveBuffer.length; i++) {
-					b = aReceiveBuffer[i];
-					if(b != 0) {
-						c = (char)b;
-						if(c == '!') {
-							break;
-						} else {
-							s.append(c);
-						}
-					}
-				}
-				applyPuzzle_PC(id, s.toString());
+				bufferIncoming.append(getInput().read());
 			} catch (IOException e) {
 				log.error("Failed to read incoming data - %s", e.getMessage());
 			}
 		}
 	}
 
-	private Future applyPuzzle_PC(byte identifier, String message) {
-		return EXECUTOR.submit(() -> {
-			Optional<Puzzle> puzzle = puzzleManager.getPuzzle(identifier);
-			if (puzzle.isPresent()) {
-				puzzle.get().apply(message);
-			} else {
-				log.info(String.format("Could not identify serial event to a puzzle: %s", identifier));
+	@Scheduled(fixedRate = 100)
+	private void checkBuffer() {
+		if (bufferIncoming.length() == 0) {
+			return;
+		}
+
+		StringBuilder recvData = new StringBuilder();
+		int length = 0;
+		for (int i = 0; i < bufferIncoming.length(); i++) {
+			recvData.append(bufferIncoming.charAt(i));
+			if (bufferIncoming.charAt(i) == '!') {
+
+				queue.add(Package.builder()
+						.identifier(String.valueOf(recvData.charAt(0)))
+						.message(recvData.substring(1, recvData.length()-1))
+						.build()
+				);
+
+				length += recvData.length();
+				recvData = new StringBuilder();
 			}
-		});
+		}
+		bufferIncoming.delete(0, length);
+		processQueue();
+	}
+
+	private void processQueue() {
+		Package aPackage;
+		while ((aPackage = queue.poll()) != null) {
+			log.info(aPackage.getIdentifier() + aPackage.getMessage());
+			applyPuzzle_PC(aPackage.getIdentifier(), aPackage.getMessage());
+		}
+	}
+
+	@Value
+	@Builder
+	private static class Package {
+		private String identifier;
+		private String message;
+	}
+
+	private Future applyPuzzle_PC(String identifier, String message) {
+		return EXECUTOR.submit(() -> puzzleManager.applyToPuzzle(identifier, message)
+				.ifPresent(pair -> {
+					if(pair.getValue1().equals("finished")) {
+						stateMachine.sendEvent(String.format("%s_Event", pair.getValue0()));
+						finishPuzzle(pair.getValue0());
+					}
+				}));
 	}
 
 	private Future initPuzzles() {
@@ -219,10 +245,8 @@ public class RoomSM extends SerialCommunicator {
 	}
 
 	private Future sendCommandToPuzzle(String puzzleName, String name) {
-		return EXECUTOR.submit(() ->puzzleManager.getPuzzle(puzzleName)
-				.ifPresent(puzzle -> puzzle.getPC_PuzzleCommand(name)
-								.ifPresent(s -> writeData(puzzle.getIdentifier(), s))
-				)
+		return EXECUTOR.submit(() -> puzzleManager.getPC_PuzzleCommand(puzzleName, name)
+				.ifPresent(pair -> writeData(pair.getValue0(), pair.getValue1()))
 		);
 	}
 
@@ -238,8 +262,17 @@ public class RoomSM extends SerialCommunicator {
 			Boolean init = false;
 			while(!init) {
 				try {
-					init = puzzleManager.getPuzzles().values().stream()
-							.allMatch(puzzle -> puzzle.getPuzzleState().equals("stopped"));
+					stateMachine.getStates().stream()
+							.filter(state -> !state.getId().toLowerCase().contains("final"))
+							.forEach(state->{
+								log.info(state.getId());
+								puzzleManager.getPuzzleState(state.getId()).ifPresent(log::info);
+							});
+					init = stateMachine.getStates().stream()
+							.filter(state -> !state.getId().toLowerCase().contains("final"))
+							.allMatch(state -> puzzleManager.getPuzzleState(state.getId())
+									.map(puzzleState -> puzzleState.equals("stopped"))
+									.orElse(false));
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
@@ -247,6 +280,30 @@ public class RoomSM extends SerialCommunicator {
 			}
 			stateMachine.sendEvent("INITCHECK");
 		});
+	}
+
+	public Map<String,Puzzle> getPuzzles() {
+		return puzzleManager.getPuzzles();
+	}
+
+	public Optional<String> getPuzzleState(String puzzleName) {
+		return puzzleManager.getPuzzleState(puzzleName);
+	}
+
+	public Optional<String> getPuzzleStateInfo(String puzzleName) {
+		return puzzleManager.getPuzzleStateInfo(puzzleName);
+	}
+
+	public Optional<DataObject> retrieveData(String groupname) {
+		return dataManager.retrieveData(groupname);
+	}
+
+	public List<DataObject> retrieveData() {
+		return dataManager.retrieveData();
+	}
+
+	public void storeData(String groupname) {
+		dataManager.storeData(groupname, new ArrayList<>(puzzlesData.values()), timeRemaining.getRemainingTimeInSeconds(), succeeded);
 	}
 
 }

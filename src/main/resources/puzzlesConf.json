@@ -1,347 +1,345 @@
-{
-    "puzzles": [
-        {
-            "NFC_Ketel": {
-                "SL": "415B96E3",
-                "SH": "13A200",
-                "identifier": 2,
-                "PC_Puzzle": [
-                    {
-                        "11": {
-                            "name": "start",
-                            "type": "command"
-                        }
-                    },
-                    {
-                        "12": {
-                            "name": "stop",
-                            "type": "command"
-                        }
-                    },
-                    {
-                        "13": {
-                            "name": "reset",
-                            "type": "command"
-                        }
-                    },
-                    {
-                        "14": {
-                            "name": "finish",
-                            "type": "command"
-                        }
-                    },
-                    {
-                        "15": {
-                            "name": "test",
-                            "type": "command"
-                        }
+[
+    {
+        "NFC_Ketel": {
+            "SL": "415B96E3",
+            "SH": "13A200",
+            "identifier": 2,
+            "PC_Puzzle": [
+                {
+                    "11": {
+                        "name": "start",
+                        "type": "command"
                     }
-                ],
-                "Puzzle_PC": [
-                    {
-                        "01": {
-                            "name": "ready",
-                            "type": "status"
-                        }
-                    },
-                    {
-                        "02": {
-                            "name": "started",
-                            "type": "status"
-                        }
-                    },
-                    {
-                        "03": {
-                            "name": "stopped",
-                            "type": "status"
-                        }
-                    },
-                    {
-                        "04": {
-                            "name": "finished",
-                            "type": "status"
-                        }
-                    },
-                    {
-                        "61": {
-                            "name": "bubbelen",
-                            "type": "sound"
-                        }
-                    },
-                    {
-                        "62": {
-                            "name": "correct_ingredienten",
-                            "type": "sound"
-                        }
-                    },
-                    {
-                        "63": {
-                            "name": "incorrect_ingredienten",
-                            "type": "sound"
-                        }
+                },
+                {
+                    "12": {
+                        "name": "stop",
+                        "type": "command"
                     }
-                ]
-            }
-        },
-        {
-            "Simon_Says": {
-                "SL": "415B69DA",
-                "SH": "13A200",
-                "identifier": 5,
-                "PC_Puzzle": [
-                    {
-                        "11": {
-                            "name": "start",
-                            "type": "command"
-                        }
-                    },
-                    {
-                        "12": {
-                            "name": "stop",
-                            "type": "command"
-                        }
-                    },
-                    {
-                        "13": {
-                            "name": "reset",
-                            "type": "command"
-                        }
-                    },
-                    {
-                        "14": {
-                            "name": "finish",
-                            "type": "command"
-                        }
-                    },
-                    {
-                        "15": {
-                            "name": "test",
-                            "type": "command"
-                        }
+                },
+                {
+                    "13": {
+                        "name": "reset",
+                        "type": "command"
                     }
-                ],
-                "Puzzle_PC": [
-                    {
-                        "01": {
-                            "name": "ready",
-                            "type": "status"
-                        }
-                    },
-                    {
-                        "02": {
-                            "name": "started",
-                            "type": "status"
-                        }
-                    },
-                    {
-                        "03": {
-                            "name": "stopped",
-                            "type": "status"
-                        }
-                    },
-                    {
-                        "04": {
-                            "name": "finished",
-                            "type": "status"
-                        }
+                },
+                {
+                    "14": {
+                        "name": "finish",
+                        "type": "command"
                     }
-                ]
-            }
-        },
-        {
-            "LDR_Hitman_Pro": {
-                "SL": "415B96E2",
-                "SH": "13A200",
-                "identifier": 6,
-                "PC_Puzzle": [
-                    {
-                        "11": {
-                            "name": "start",
-                            "type": "command"
-                        }
-                    },
-                    {
-                        "12": {
-                            "name": "stop",
-                            "type": "command"
-                        }
-                    },
-                    {
-                        "13": {
-                            "name": "reset",
-                            "type": "command"
-                        }
-                    },
-                    {
-                        "14": {
-                            "name": "finish",
-                            "type": "command"
-                        }
-                    },
-                    {
-                        "15": {
-                            "name": "test",
-                            "type": "command"
-                        }
+                },
+                {
+                    "15": {
+                        "name": "test",
+                        "type": "command"
                     }
-                ],
-                "Puzzle_PC": [
-                    {
-                        "01": {
-                            "name": "ready",
-                            "type": "status"
-                        }
-                    },
-                    {
-                        "02": {
-                            "name": "started",
-                            "type": "status"
-                        }
-                    },
-                    {
-                        "03": {
-                            "name": "stopped",
-                            "type": "status"
-                        }
-                    },
-                    {
-                        "04": {
-                            "name": "finished",
-                            "type": "status"
-                        }
+                }
+            ],
+            "Puzzle_PC": [
+                {
+                    "01": {
+                        "name": "ready",
+                        "type": "status"
                     }
-                ]
-            }
-        },
-        {
-            "Magnet_Canon": {
-                "SL": "415B96DC",
-                "SH": "13A200",
-                "identifier": 7,
-                "PC_Puzzle": [
-                    {
-                        "1": {
-                            "name": "start",
-                            "type": "command"
-                        }
-                    },
-                    {
-                        "2": {
-                            "name": "stop",
-                            "type": "command"
-                        }
-                    },
-                    {
-                        "3": {
-                            "name": "reset",
-                            "type": "command"
-                        }
-                    },
-                    {
-                        "4": {
-                            "name": "finish",
-                            "type": "command"
-                        }
-                    },
-                    {
-                        "5": {
-                            "name": "test",
-                            "type": "command"
-                        }
+                },
+                {
+                    "02": {
+                        "name": "started",
+                        "type": "status"
                     }
-                ],
-                "Puzzle_PC": [
-                    {
-                        "01": {
-                            "name": "ready",
-                            "type": "status"
-                        }
-                    },
-                    {
-                        "02": {
-                            "name": "started",
-                            "type": "status"
-                        }
-                    },
-                    {
-                        "03": {
-                            "name": "stopped",
-                            "type": "status"
-                        }
-                    },
-                    {
-                        "04": {
-                            "name": "finished",
-                            "type": "status"
-                        }
+                },
+                {
+                    "03": {
+                        "name": "stopped",
+                        "type": "status"
                     }
-                ]
-            }
-        },
-        {
-            "JoyStick": {
-                "SL": "414F9218",
-                "SH": "13A200",
-                "identifier": 7,
-                "PC_Puzzle": [
-                    {
-                        "1": {
-                            "name": "start",
-                            "type": "command"
-                        }
-                    },
-                    {
-                        "2": {
-                            "name": "stop",
-                            "type": "command"
-                        }
-                    },
-                    {
-                        "3": {
-                            "name": "reset",
-                            "type": "command"
-                        }
-                    },
-                    {
-                        "4": {
-                            "name": "finish",
-                            "type": "command"
-                        }
-                    },
-                    {
-                        "5": {
-                            "name": "test",
-                            "type": "command"
-                        }
+                },
+                {
+                    "04": {
+                        "name": "finished",
+                        "type": "status"
                     }
-                ],
-                "Puzzle_PC": [
-                    {
-                        "01": {
-                            "name": "ready",
-                            "type": "status"
-                        }
-                    },
-                    {
-                        "02": {
-                            "name": "started",
-                            "type": "status"
-                        }
-                    },
-                    {
-                        "03": {
-                            "name": "stopped",
-                            "type": "status"
-                        }
-                    },
-                    {
-                        "04": {
-                            "name": "finished",
-                            "type": "status"
-                        }
+                },
+                {
+                    "61": {
+                        "name": "bubbelen",
+                        "type": "sound"
                     }
-                ]
-            }
+                },
+                {
+                    "62": {
+                        "name": "correct_ingredienten",
+                        "type": "sound"
+                    }
+                },
+                {
+                    "63": {
+                        "name": "incorrect_ingredienten",
+                        "type": "sound"
+                    }
+                }
+            ]
         }
-    ]
-}
+    },
+    {
+        "Simon_Says": {
+            "SL": "415B69DA",
+            "SH": "13A200",
+            "identifier": 5,
+            "PC_Puzzle": [
+                {
+                    "11": {
+                        "name": "start",
+                        "type": "command"
+                    }
+                },
+                {
+                    "12": {
+                        "name": "stop",
+                        "type": "command"
+                    }
+                },
+                {
+                    "13": {
+                        "name": "reset",
+                        "type": "command"
+                    }
+                },
+                {
+                    "14": {
+                        "name": "finish",
+                        "type": "command"
+                    }
+                },
+                {
+                    "15": {
+                        "name": "test",
+                        "type": "command"
+                    }
+                }
+            ],
+            "Puzzle_PC": [
+                {
+                    "01": {
+                        "name": "ready",
+                        "type": "status"
+                    }
+                },
+                {
+                    "02": {
+                        "name": "started",
+                        "type": "status"
+                    }
+                },
+                {
+                    "03": {
+                        "name": "stopped",
+                        "type": "status"
+                    }
+                },
+                {
+                    "04": {
+                        "name": "finished",
+                        "type": "status"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "LDR_Hitman_Pro": {
+            "SL": "415B96E2",
+            "SH": "13A200",
+            "identifier": 6,
+            "PC_Puzzle": [
+                {
+                    "11": {
+                        "name": "start",
+                        "type": "command"
+                    }
+                },
+                {
+                    "12": {
+                        "name": "stop",
+                        "type": "command"
+                    }
+                },
+                {
+                    "13": {
+                        "name": "reset",
+                        "type": "command"
+                    }
+                },
+                {
+                    "14": {
+                        "name": "finish",
+                        "type": "command"
+                    }
+                },
+                {
+                    "15": {
+                        "name": "test",
+                        "type": "command"
+                    }
+                }
+            ],
+            "Puzzle_PC": [
+                {
+                    "01": {
+                        "name": "ready",
+                        "type": "status"
+                    }
+                },
+                {
+                    "02": {
+                        "name": "started",
+                        "type": "status"
+                    }
+                },
+                {
+                    "03": {
+                        "name": "stopped",
+                        "type": "status"
+                    }
+                },
+                {
+                    "04": {
+                        "name": "finished",
+                        "type": "status"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "Magnet_Canon": {
+            "SL": "415B96DC",
+            "SH": "13A200",
+            "identifier": 7,
+            "PC_Puzzle": [
+                {
+                    "11": {
+                        "name": "start",
+                        "type": "command"
+                    }
+                },
+                {
+                    "12": {
+                        "name": "stop",
+                        "type": "command"
+                    }
+                },
+                {
+                    "13": {
+                        "name": "reset",
+                        "type": "command"
+                    }
+                },
+                {
+                    "14": {
+                        "name": "finish",
+                        "type": "command"
+                    }
+                },
+                {
+                    "15": {
+                        "name": "test",
+                        "type": "command"
+                    }
+                }
+            ],
+            "Puzzle_PC": [
+                {
+                    "01": {
+                        "name": "ready",
+                        "type": "status"
+                    }
+                },
+                {
+                    "02": {
+                        "name": "started",
+                        "type": "status"
+                    }
+                },
+                {
+                    "03": {
+                        "name": "stopped",
+                        "type": "status"
+                    }
+                },
+                {
+                    "04": {
+                        "name": "finished",
+                        "type": "status"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "JoyStick": {
+            "SL": "414F9218",
+            "SH": "13A200",
+            "identifier": 8,
+            "PC_Puzzle": [
+                {
+                    "11": {
+                        "name": "start",
+                        "type": "command"
+                    }
+                },
+                {
+                    "12": {
+                        "name": "stop",
+                        "type": "command"
+                    }
+                },
+                {
+                    "13": {
+                        "name": "reset",
+                        "type": "command"
+                    }
+                },
+                {
+                    "14": {
+                        "name": "finish",
+                        "type": "command"
+                    }
+                },
+                {
+                    "15": {
+                        "name": "test",
+                        "type": "command"
+                    }
+                }
+            ],
+            "Puzzle_PC": [
+                {
+                    "01": {
+                        "name": "ready",
+                        "type": "status"
+                    }
+                },
+                {
+                    "02": {
+                        "name": "started",
+                        "type": "status"
+                    }
+                },
+                {
+                    "03": {
+                        "name": "stopped",
+                        "type": "status"
+                    }
+                },
+                {
+                    "04": {
+                        "name": "finished",
+                        "type": "status"
+                    }
+                }
+            ]
+        }
+    }
+]

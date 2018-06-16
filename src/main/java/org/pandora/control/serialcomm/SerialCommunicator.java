@@ -34,7 +34,7 @@ public abstract class SerialCommunicator implements SerialPortEventListener {
         this.searchForPorts();
     }
 
-    abstract public void serialEvent(SerialPortEvent evt);
+    abstract public void serialEvent(SerialPortEvent evt) ;
 
     protected void checkForSerialPorts() {
         this.searchForPorts();
@@ -58,13 +58,11 @@ public abstract class SerialCommunicator implements SerialPortEventListener {
         return portMap.keySet();
     }
 
-    protected void writeData(char identifier, String serialMessage) {
+    protected void writeData(String identifier, String serialMessage) {
         if (isConnected()) {
             try {
-                output.write(String.format("%s%s", identifier, serialMessage).getBytes());
-                output.flush();
-
-                output.write(NEW_LINE_ASCII);
+                log.info("Writing data to " + identifier + " with message " + serialMessage);
+                output.write(String.format("%s%s!", identifier, serialMessage).getBytes());
                 output.flush();
             } catch (IOException e) {
                 log.error(String.format("Failed to write data - %s", e.getMessage()));
