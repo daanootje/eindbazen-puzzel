@@ -4,7 +4,6 @@ import gnu.io.SerialPortEvent;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
-import org.pandora.control.Application;
 import org.pandora.control.clock.CountDown;
 import org.pandora.control.data.DataManager;
 import org.pandora.control.data.DataObject;
@@ -80,6 +79,9 @@ public class RoomSM extends SerialCommunicator {
 		try {
 			stopSM();
 			checkForSerialPorts();
+			EXECUTOR = Executors.newFixedThreadPool(10);
+			bufferIncoming = new StringBuilder();
+			queue = new LinkedList<>();
 			stateMachine.stop();
 			stateMachine.start();
 			reset = true;
@@ -153,7 +155,7 @@ public class RoomSM extends SerialCommunicator {
 				byte[] bytes = new byte[20];
 				getInput().read(bytes);
 				String s = new String(bytes, StandardCharsets.UTF_8);
-				bufferIncoming.append(s);
+				bufferIncoming.append(s.replaceAll("\u0000.*", ""));
 			} catch (IOException e) {
 				log.error("Failed to read incoming data - %s", e.getMessage());
 			}
@@ -178,7 +180,6 @@ public class RoomSM extends SerialCommunicator {
 						.message(recvData.substring(1, recvData.length()-1))
 						.build()
 				);
-
 				length += recvData.length();
 				recvData = new StringBuilder();
 				process = true;
@@ -193,7 +194,7 @@ public class RoomSM extends SerialCommunicator {
 	private void processQueue() {
 		Package aPackage;
 		while ((aPackage = queue.poll()) != null) {
-			log.info("Processing package for " + aPackage.getIdentifier() + ", " + aPackage.getMessage());
+			log.info(String.format("Processing package for %s with message: '%s'",aPackage.getIdentifier(), aPackage.getMessage()));
 			applyPuzzle_PC(aPackage.getIdentifier(), aPackage.getMessage());
 		}
 	}
@@ -260,6 +261,9 @@ public class RoomSM extends SerialCommunicator {
 									.map(puzzleState -> puzzleState.equals("stopped"))
 									.orElse(false));
 					Thread.sleep(100);
+					if(time % 1000 == 0) {
+						log.info("checking...");
+					}
 					time += 100;
 				} catch (InterruptedException e) {
 					e.printStackTrace();
@@ -304,30 +308,29 @@ public class RoomSM extends SerialCommunicator {
 	private class StateMachineEventListener extends StateMachineListenerAdapter<String, String> {
 
 		@Override
+		public void stateChanged(State<String, String> from, State<String, String> to) {
+		}
+
+		@Override
 		public void stateEntered(State<String, String> stateSM) {
 			log.info("State Changed! - Current State: " + stateSM.getId());
 			String state = stateSM.getId();
 			switch (state) {
 				case "InitCheck":
+					log.info("Initializing all the puzzles, waiting for their response...");
 					initPuzzles();
 					checkInitPuzzles();
 					break;
 				case "Idle":
-
+					log.info("Waiting for user input in order to start the puzzles");
 					break;
 				case "Finalize":
+					log.info("Finalizing statemachine");
 					succeeded = true;
 					endSM();
 					stateMachine.sendEvent("Finalize_Signal");
 					break;
 			}
-		}
-
-		@Override
-		public void stateMachineStarted(StateMachine<String, String> stateMachine) {
-			EXECUTOR = Executors.newFixedThreadPool(10);
-			bufferIncoming = new StringBuilder();
-			queue = new LinkedList<>();
 		}
 
 		@Override
