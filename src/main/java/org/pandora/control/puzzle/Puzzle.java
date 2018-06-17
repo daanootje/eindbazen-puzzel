@@ -2,6 +2,7 @@ package org.pandora.control.puzzle;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.pandora.control.music.AudioManager;
 
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.Optional;
 
 @Data
 @Builder
+@Slf4j
 public class Puzzle {
 
 	private AudioManager audioManager;
@@ -52,6 +54,9 @@ public class Puzzle {
 		if(Puzzle_PC.containsKey(message)) {
 			String name = Puzzle_PC.get(message).getName();
 			String type = Puzzle_PC.get(message).getType();
+			log.info(message);
+			log.info(name);
+			log.info(type);
 			switch (type) {
 				case "status":
 					setPuzzleState(name);

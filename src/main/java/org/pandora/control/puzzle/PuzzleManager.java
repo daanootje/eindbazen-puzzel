@@ -1,8 +1,6 @@
 package org.pandora.control.puzzle;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 import org.javatuples.Pair;
 import org.pandora.control.music.AudioManager;
 
@@ -15,7 +13,6 @@ import java.util.stream.Collectors;
 
 import static org.pandora.control.util.Deserializer.flattenMap;
 
-@Slf4j
 public class PuzzleManager {
 
     private Map<String,Puzzle> puzzleMap;
@@ -31,29 +28,55 @@ public class PuzzleManager {
     }
 
     public Optional<String> getPuzzleState(String puzzleName) {
-        return Optional.ofNullable(puzzleMap.get(puzzleName))
-                .map(Puzzle::getPuzzleState);
+        Optional<String> state = this.getPuzzle(puzzleName).map(Puzzle::getPuzzleState);
+        if(state.isPresent()) {
+            return state;
+        } else {
+            return Optional.ofNullable(puzzleMap.get(puzzleName))
+                    .map(Puzzle::getPuzzleState);
+        }
     }
 
     public Optional<String> getPuzzleStateInfo(String puzzleName) {
-        return Optional.ofNullable(puzzleMap.get(puzzleName))
-                .map(Puzzle::getStateInfo);
+        Optional<String> stateInfo = this.getPuzzle(puzzleName).map(Puzzle::getStateInfo);
+        if(stateInfo.isPresent()) {
+            return stateInfo;
+        } else {
+            return Optional.ofNullable(puzzleMap.get(puzzleName))
+                    .map(Puzzle::getStateInfo);
+        }
     }
 
-    public Boolean isPresent(String puzzleName) {
-        return puzzleMap.containsKey(puzzleName);
+    public Optional<String> getPuzzleName(String puzzleName) {
+        Optional<String> name = this.getPuzzle(puzzleName).map(Puzzle::getName);
+        if(name.isPresent()) {
+            return name;
+        } else {
+            return Optional.ofNullable(puzzleMap.get(puzzleName))
+                    .map(Puzzle::getName);
+        }
     }
 
-  public Map<String,Puzzle> getPuzzles() {
+    public Map<String,Puzzle> getPuzzles() {
         return puzzleMap;
     }
 
     public Optional<Pair<String, String>> getPC_PuzzleCommand(String puzzleName, String name) {
-        return Optional.ofNullable(puzzleMap.get(puzzleName))
-                .map(puzzle -> {
-                    Optional<String> command = puzzle.getPC_PuzzleCommand(name);
-                    return command.map(s -> new Pair<>(puzzle.getIdentifier(), s)).orElse(null);
-                });
+        Optional<Pair<String, String>> pair =
+                this.getPuzzle(puzzleName)
+                        .map(puzzle -> {
+                            Optional<String> command = puzzle.getPC_PuzzleCommand(name);
+                            return command.map(s -> new Pair<>(puzzle.getIdentifier(), s)).orElse(null);
+                        });
+        if(pair.isPresent()) {
+            return pair;
+        } else {
+            return Optional.ofNullable(puzzleMap.get(puzzleName))
+                    .map(puzzle -> {
+                        Optional<String> command = puzzle.getPC_PuzzleCommand(name);
+                        return command.map(s -> new Pair<>(puzzle.getIdentifier(), s)).orElse(null);
+                    });
+        }
     }
 
     public Optional<Pair<String, String>> applyToPuzzle(String puzzleID, String message) {

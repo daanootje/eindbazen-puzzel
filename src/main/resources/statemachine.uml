@@ -6,45 +6,51 @@
   <packagedElement xmi:type="uml:StateMachine" xmi:id="_L82sYGzHEeiF8utqcG3CZg" name="StateMachine" visibility="public">
     <region xmi:type="uml:Region" xmi:id="_L-mY0GzHEeiF8utqcG3CZg" name="Region1">
       <transition xmi:type="uml:Transition" xmi:id="_Wkc14G53EeiCxqbRPsoz_A" source="_yAH9UG52EeiCxqbRPsoz_A" target="_4JKYIG52EeiCxqbRPsoz_A"/>
-      <transition xmi:type="uml:Transition" xmi:id="_3soQQG8-EeiYHpq3X2UQNg" name="Idle_Key_Switch" source="_4JKYIG52EeiCxqbRPsoz_A" target="_iXiz8G88EeiYHpq3X2UQNg">
-        <trigger xmi:type="uml:Trigger" xmi:id="_msXwEG9FEeiYHpq3X2UQNg" name="Idle_Trigger" event="_kIVtEG9FEeiYHpq3X2UQNg"/>
+      <transition xmi:type="uml:Transition" xmi:id="_3soQQG8-EeiYHpq3X2UQNg" name="InitCheck_Idle" source="_4JKYIG52EeiCxqbRPsoz_A" target="_0ci78HIlEeiFbd_qEL7dZg">
+        <trigger xmi:type="uml:Trigger" xmi:id="_VbQzYHJgEeiFbd_qEL7dZg" name="InitCheck_Trigger" event="_VLq4MHJgEeiFbd_qEL7dZg"/>
       </transition>
       <transition xmi:type="uml:Transition" xmi:id="_oAbnsG8_EeiYHpq3X2UQNg" name="Key_Switch_Simon_Says+JoyStick" source="_iXiz8G88EeiYHpq3X2UQNg" target="_mplwkG8_EeiYHpq3X2UQNg">
-        <trigger xmi:type="uml:Trigger" xmi:id="_v05a0G9FEeiYHpq3X2UQNg" name="Key_Switch_Trigger" event="_s2rWMG9FEeiYHpq3X2UQNg"/>
+        <trigger xmi:type="uml:Trigger" xmi:id="_jbqMAHJgEeiFbd_qEL7dZg" name="Key_Switch_Trigger" event="_jE4DsHJgEeiFbd_qEL7dZg"/>
       </transition>
       <transition xmi:type="uml:Transition" xmi:id="_pORT0G8_EeiYHpq3X2UQNg" source="_mplwkG8_EeiYHpq3X2UQNg" target="_KJtFAG8-EeiYHpq3X2UQNg"/>
       <transition xmi:type="uml:Transition" xmi:id="_qeQ8EG8_EeiYHpq3X2UQNg" source="_mplwkG8_EeiYHpq3X2UQNg" target="_M68dkG8-EeiYHpq3X2UQNg"/>
       <transition xmi:type="uml:Transition" xmi:id="_F3aegG9AEeiYHpq3X2UQNg" name="Simon_Says_Green_Button" source="_KJtFAG8-EeiYHpq3X2UQNg" target="_rlSOgG8_EeiYHpq3X2UQNg">
-        <trigger xmi:type="uml:Trigger" xmi:id="_2r1dcG9FEeiYHpq3X2UQNg" name="Simon_Says_Trigger" event="_2c63sG9FEeiYHpq3X2UQNg"/>
+        <trigger xmi:type="uml:Trigger" xmi:id="_o9mKkHJgEeiFbd_qEL7dZg" name="Simon_Says_Trigger" event="_ow3WIHJgEeiFbd_qEL7dZg"/>
       </transition>
       <transition xmi:type="uml:Transition" xmi:id="_Gu1OsG9AEeiYHpq3X2UQNg" name="JoyStick_Green_Button" source="_M68dkG8-EeiYHpq3X2UQNg" target="_rlSOgG8_EeiYHpq3X2UQNg">
-        <trigger xmi:type="uml:Trigger" xmi:id="_7XEdgG9FEeiYHpq3X2UQNg" name="JoyStick_Trigger" event="_7KeL8G9FEeiYHpq3X2UQNg"/>
+        <trigger xmi:type="uml:Trigger" xmi:id="_uKhicHJgEeiFbd_qEL7dZg" name="JoyStick_Trigger" event="_t9yG8HJgEeiFbd_qEL7dZg"/>
       </transition>
       <transition xmi:type="uml:Transition" xmi:id="_HoYs4G9AEeiYHpq3X2UQNg" source="_rlSOgG8_EeiYHpq3X2UQNg" target="_vca4IG8_EeiYHpq3X2UQNg"/>
       <transition xmi:type="uml:Transition" xmi:id="_VFPTkG9AEeiYHpq3X2UQNg" name="Green_Button_LDR_Hitman_Pro" source="_vca4IG8_EeiYHpq3X2UQNg" target="_NBLWgG9AEeiYHpq3X2UQNg">
-        <trigger xmi:type="uml:Trigger" xmi:id="__x_wsG9FEeiYHpq3X2UQNg" name="Green_Button_Trigger" event="__l0V4G9FEeiYHpq3X2UQNg"/>
+        <trigger xmi:type="uml:Trigger" xmi:id="_zzxC4HJgEeiFbd_qEL7dZg" name="Green_Button_Trigger" event="_zq6o4HJgEeiFbd_qEL7dZg"/>
       </transition>
       <transition xmi:type="uml:Transition" xmi:id="_VLaXkG9BEeiYHpq3X2UQNg" name="LDR_Hitman_Pro_NFC_Ketel" source="_NBLWgG9AEeiYHpq3X2UQNg" target="_a00FgG9AEeiYHpq3X2UQNg">
-        <trigger xmi:type="uml:Trigger" xmi:id="_EsiYEG9GEeiYHpq3X2UQNg" name="LDR_Hitman_Pro_Trigger" event="_ESECkG9GEeiYHpq3X2UQNg"/>
+        <trigger xmi:type="uml:Trigger" xmi:id="_52VCQHJgEeiFbd_qEL7dZg" name="LDR_Hitman_Pro_Trigger" event="_5thrkHJgEeiFbd_qEL7dZg"/>
       </transition>
       <transition xmi:type="uml:Transition" xmi:id="_Y-ckUG9BEeiYHpq3X2UQNg" name="NFC_Ketel_Magnet_Canon" source="_a00FgG9AEeiYHpq3X2UQNg" target="_Xy268G9BEeiYHpq3X2UQNg">
-        <trigger xmi:type="uml:Trigger" xmi:id="_I-D3oG9GEeiYHpq3X2UQNg" name="NFC_Ketel_Trigger" event="_IuB3kG9GEeiYHpq3X2UQNg"/>
+        <trigger xmi:type="uml:Trigger" xmi:id="_-5Z6kHJgEeiFbd_qEL7dZg" name="NFC_Ketel_Trigger" event="_-vJyYHJgEeiFbd_qEL7dZg"/>
       </transition>
       <transition xmi:type="uml:Transition" xmi:id="_iP0pEG9BEeiYHpq3X2UQNg" name="Magnet_Canon_Crystal" source="_Xy268G9BEeiYHpq3X2UQNg" target="_gvuIQG9BEeiYHpq3X2UQNg">
-        <trigger xmi:type="uml:Trigger" xmi:id="_NP8jkG9GEeiYHpq3X2UQNg" name="Magnet_Canon_Trigger" event="_NFvesG9GEeiYHpq3X2UQNg"/>
+        <trigger xmi:type="uml:Trigger" xmi:id="_DrGvAHJhEeiFbd_qEL7dZg" name="Magnet_Canon_Trigger" event="_DiiB0HJhEeiFbd_qEL7dZg"/>
       </transition>
       <transition xmi:type="uml:Transition" xmi:id="_mp1WQG9BEeiYHpq3X2UQNg" name="Crystal_Secret_Button" source="_gvuIQG9BEeiYHpq3X2UQNg" target="_k9kBsG9BEeiYHpq3X2UQNg">
-        <trigger xmi:type="uml:Trigger" xmi:id="_SlPNQG9GEeiYHpq3X2UQNg" name="Crystal_Trigger" event="_RV8voG9GEeiYHpq3X2UQNg"/>
+        <trigger xmi:type="uml:Trigger" xmi:id="_LHJCwHJhEeiFbd_qEL7dZg" name="Crystal_Trigger" event="_K_ydkHJhEeiFbd_qEL7dZg"/>
       </transition>
       <transition xmi:type="uml:Transition" xmi:id="_xwb3QG9BEeiYHpq3X2UQNg" name="Secret_Button_Australia" source="_k9kBsG9BEeiYHpq3X2UQNg" target="_u6Wa8G9BEeiYHpq3X2UQNg">
-        <trigger xmi:type="uml:Trigger" xmi:id="_ZwNmMG9GEeiYHpq3X2UQNg" name="Secret_Button_Trigger" event="_YD2LAG9GEeiYHpq3X2UQNg"/>
+        <trigger xmi:type="uml:Trigger" xmi:id="_P_USoHJhEeiFbd_qEL7dZg" name="Secret_Button_Trigger" event="_P36DEHJhEeiFbd_qEL7dZg"/>
       </transition>
-      <transition xmi:type="uml:Transition" xmi:id="_yREfIG9BEeiYHpq3X2UQNg" name="Australia_Finish" source="_u6Wa8G9BEeiYHpq3X2UQNg" target="_uKZB4G52EeiCxqbRPsoz_A">
-        <trigger xmi:type="uml:Trigger" xmi:id="_ex2UEG9GEeiYHpq3X2UQNg" name="Australia_Trigger" event="_dREd0G9GEeiYHpq3X2UQNg"/>
+      <transition xmi:type="uml:Transition" xmi:id="_yREfIG9BEeiYHpq3X2UQNg" name="Australia_Finalize" source="_u6Wa8G9BEeiYHpq3X2UQNg" target="_vBI_AHIsEeiFbd_qEL7dZg">
+        <trigger xmi:type="uml:Trigger" xmi:id="_WwdPQHJhEeiFbd_qEL7dZg" name="Australia_Trigger" event="_Wn6-UHJhEeiFbd_qEL7dZg"/>
       </transition>
-      <subvertex xmi:type="uml:FinalState" xmi:id="_uKZB4G52EeiCxqbRPsoz_A" name="Finish"/>
+      <transition xmi:type="uml:Transition" xmi:id="_8X2loHIlEeiFbd_qEL7dZg" name="Idle_Key_Switch" source="_0ci78HIlEeiFbd_qEL7dZg" target="_iXiz8G88EeiYHpq3X2UQNg">
+        <trigger xmi:type="uml:Trigger" xmi:id="_cBaoAHJgEeiFbd_qEL7dZg" name="Idle_Trigger" event="_b1JtoHJgEeiFbd_qEL7dZg"/>
+      </transition>
+      <transition xmi:type="uml:Transition" xmi:id="_ByzuQHItEeiFbd_qEL7dZg" name="Finalize_Final" source="_vBI_AHIsEeiFbd_qEL7dZg" target="_uKZB4G52EeiCxqbRPsoz_A">
+        <trigger xmi:type="uml:Trigger" xmi:id="_brF9QHJhEeiFbd_qEL7dZg" name="Finalize_Trigger" event="_biaiYHJhEeiFbd_qEL7dZg"/>
+      </transition>
+      <subvertex xmi:type="uml:FinalState" xmi:id="_uKZB4G52EeiCxqbRPsoz_A" name="Final"/>
       <subvertex xmi:type="uml:Pseudostate" xmi:id="_yAH9UG52EeiCxqbRPsoz_A" name="Initial"/>
-      <subvertex xmi:type="uml:State" xmi:id="_4JKYIG52EeiCxqbRPsoz_A" name="Idle"/>
+      <subvertex xmi:type="uml:State" xmi:id="_4JKYIG52EeiCxqbRPsoz_A" name="InitCheck"/>
       <subvertex xmi:type="uml:State" xmi:id="_iXiz8G88EeiYHpq3X2UQNg" name="Key_Switch"/>
       <subvertex xmi:type="uml:State" xmi:id="_KJtFAG8-EeiYHpq3X2UQNg" name="Simon_Says"/>
       <subvertex xmi:type="uml:State" xmi:id="_M68dkG8-EeiYHpq3X2UQNg" name="JoyStick"/>
@@ -57,23 +63,34 @@
       <subvertex xmi:type="uml:State" xmi:id="_gvuIQG9BEeiYHpq3X2UQNg" name="Crystal"/>
       <subvertex xmi:type="uml:State" xmi:id="_k9kBsG9BEeiYHpq3X2UQNg" name="Secret_Button"/>
       <subvertex xmi:type="uml:State" xmi:id="_u6Wa8G9BEeiYHpq3X2UQNg" name="Australia"/>
+      <subvertex xmi:type="uml:State" xmi:id="_0ci78HIlEeiFbd_qEL7dZg" name="Idle"/>
+      <subvertex xmi:type="uml:State" xmi:id="_vBI_AHIsEeiFbd_qEL7dZg" name="Finalize"/>
     </region>
   </packagedElement>
-  <packagedElement xmi:type="uml:AnyReceiveEvent" xmi:id="_kIVtEG9FEeiYHpq3X2UQNg" name="Idle_Event"/>
-  <packagedElement xmi:type="uml:AnyReceiveEvent" xmi:id="_s2rWMG9FEeiYHpq3X2UQNg" name="Key_Switch_Event"/>
-  <packagedElement xmi:type="uml:AnyReceiveEvent" xmi:id="_2c63sG9FEeiYHpq3X2UQNg" name="Simon_Says_Event"/>
-  <packagedElement xmi:type="uml:AnyReceiveEvent" xmi:id="_7KeL8G9FEeiYHpq3X2UQNg" name="JoyStick_Event"/>
-  <packagedElement xmi:type="uml:AnyReceiveEvent" xmi:id="__l0V4G9FEeiYHpq3X2UQNg" name="Green_Button_Event"/>
-  <packagedElement xmi:type="uml:AnyReceiveEvent" xmi:id="_ESECkG9GEeiYHpq3X2UQNg" name="LDR_Hitman_Pro_Event"/>
-  <packagedElement xmi:type="uml:AnyReceiveEvent" xmi:id="_IuB3kG9GEeiYHpq3X2UQNg" name="NFC_Ketel_Event"/>
-  <packagedElement xmi:type="uml:AnyReceiveEvent" xmi:id="_NFvesG9GEeiYHpq3X2UQNg" name="Magnet_Canon_Event"/>
-  <packagedElement xmi:type="uml:AnyReceiveEvent" xmi:id="_RV8voG9GEeiYHpq3X2UQNg" name="Crystal_Event"/>
-  <packagedElement xmi:type="uml:AnyReceiveEvent" xmi:id="_YD2LAG9GEeiYHpq3X2UQNg" name="Secret_Button_Event"/>
-  <packagedElement xmi:type="uml:AnyReceiveEvent" xmi:id="_dREd0G9GEeiYHpq3X2UQNg" name="Australia_Event"/>
-  <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_1Bm_AG8_EeiYHpq3X2UQNg">
-    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_1Bm_AW8_EeiYHpq3X2UQNg" source="http://www.eclipse.org/uml2/2.0.0/UML">
-      <references xmi:type="ecore:EPackage" href="pathmap://PAPYRUS_ACTIONLANGUAGE_PROFILE/ActionLanguage-Profile.profile.uml#_Kv8EIKFXEeS_KNX0nfvIVQ"/>
-    </eAnnotations>
-    <appliedProfile xmi:type="uml:Profile" href="pathmap://PAPYRUS_ACTIONLANGUAGE_PROFILE/ActionLanguage-Profile.profile.uml#ActionLanguage"/>
-  </profileApplication>
+  <packagedElement xmi:type="uml:Signal" xmi:id="_VBSNIHJgEeiFbd_qEL7dZg" name="InitCheck_Signal"/>
+  <packagedElement xmi:type="uml:SignalEvent" xmi:id="_VLq4MHJgEeiFbd_qEL7dZg" name="InitCheck_SE" signal="_VBSNIHJgEeiFbd_qEL7dZg"/>
+  <packagedElement xmi:type="uml:Signal" xmi:id="_bidbIHJgEeiFbd_qEL7dZg" name="Idle_Signal"/>
+  <packagedElement xmi:type="uml:SignalEvent" xmi:id="_b1JtoHJgEeiFbd_qEL7dZg" name="Idle_SE" signal="_bidbIHJgEeiFbd_qEL7dZg"/>
+  <packagedElement xmi:type="uml:Signal" xmi:id="_i2tE0HJgEeiFbd_qEL7dZg" name="Key_Switch_Signal"/>
+  <packagedElement xmi:type="uml:SignalEvent" xmi:id="_jE4DsHJgEeiFbd_qEL7dZg" name="Key_Switch_SE" signal="_i2tE0HJgEeiFbd_qEL7dZg"/>
+  <packagedElement xmi:type="uml:Signal" xmi:id="_onleUHJgEeiFbd_qEL7dZg" name="Simon_Says_Signal"/>
+  <packagedElement xmi:type="uml:SignalEvent" xmi:id="_ow3WIHJgEeiFbd_qEL7dZg" name="Simon_Says_SE" signal="_onleUHJgEeiFbd_qEL7dZg"/>
+  <packagedElement xmi:type="uml:Signal" xmi:id="_t1dRYHJgEeiFbd_qEL7dZg" name="JoyStick_Signal"/>
+  <packagedElement xmi:type="uml:SignalEvent" xmi:id="_t9yG8HJgEeiFbd_qEL7dZg" name="JoyStick_SE" signal="_t1dRYHJgEeiFbd_qEL7dZg"/>
+  <packagedElement xmi:type="uml:Signal" xmi:id="_zjE7gHJgEeiFbd_qEL7dZg" name="Green_Button_Signal"/>
+  <packagedElement xmi:type="uml:SignalEvent" xmi:id="_zq6o4HJgEeiFbd_qEL7dZg" name="Green_Button_SE" signal="_zjE7gHJgEeiFbd_qEL7dZg"/>
+  <packagedElement xmi:type="uml:Signal" xmi:id="_5kCYYHJgEeiFbd_qEL7dZg" name="LDR_Hitman_Pro_Signal"/>
+  <packagedElement xmi:type="uml:SignalEvent" xmi:id="_5thrkHJgEeiFbd_qEL7dZg" name="LDR_Hitman_Pro_SE" signal="_5kCYYHJgEeiFbd_qEL7dZg"/>
+  <packagedElement xmi:type="uml:Signal" xmi:id="_-o_gAHJgEeiFbd_qEL7dZg" name="NFC_Ketel_Signal"/>
+  <packagedElement xmi:type="uml:SignalEvent" xmi:id="_-vJyYHJgEeiFbd_qEL7dZg" name="NFC_Ketel_SE" signal="_-o_gAHJgEeiFbd_qEL7dZg"/>
+  <packagedElement xmi:type="uml:Signal" xmi:id="_DVbZ8HJhEeiFbd_qEL7dZg" name="Magnet_Canon_Signal"/>
+  <packagedElement xmi:type="uml:SignalEvent" xmi:id="_DiiB0HJhEeiFbd_qEL7dZg" name="Magnet_Canon_SE" signal="_DVbZ8HJhEeiFbd_qEL7dZg"/>
+  <packagedElement xmi:type="uml:Signal" xmi:id="_K4NO4HJhEeiFbd_qEL7dZg" name="Crystal_Signal"/>
+  <packagedElement xmi:type="uml:SignalEvent" xmi:id="_K_ydkHJhEeiFbd_qEL7dZg" name="Crystal_SE" signal="_K4NO4HJhEeiFbd_qEL7dZg"/>
+  <packagedElement xmi:type="uml:Signal" xmi:id="_Pqvw0HJhEeiFbd_qEL7dZg" name="Secret_Button_Signal"/>
+  <packagedElement xmi:type="uml:SignalEvent" xmi:id="_P36DEHJhEeiFbd_qEL7dZg" name="Secret_Button_SE" signal="_Pqvw0HJhEeiFbd_qEL7dZg"/>
+  <packagedElement xmi:type="uml:Signal" xmi:id="_WhYRcHJhEeiFbd_qEL7dZg" name="Australia_Signal"/>
+  <packagedElement xmi:type="uml:SignalEvent" xmi:id="_Wn6-UHJhEeiFbd_qEL7dZg" name="Australia_SE" signal="_WhYRcHJhEeiFbd_qEL7dZg"/>
+  <packagedElement xmi:type="uml:Signal" xmi:id="_bX-M8HJhEeiFbd_qEL7dZg" name="Finalize_Signal"/>
+  <packagedElement xmi:type="uml:SignalEvent" xmi:id="_biaiYHJhEeiFbd_qEL7dZg" name="Finalize_SE" signal="_bX-M8HJhEeiFbd_qEL7dZg"/>
 </uml:Model>

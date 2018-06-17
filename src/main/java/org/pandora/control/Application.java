@@ -1,6 +1,7 @@
 package org.pandora.control;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.pandora.control.clock.CountDown;
 import org.pandora.control.data.DataManager;
@@ -18,10 +19,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.io.IOException;
 
+@Slf4j
 @ComponentScan
 @SpringBootApplication
 public class Application {

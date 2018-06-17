@@ -13,7 +13,7 @@ import org.springframework.statemachine.uml.UmlStateMachineModelFactory;
 @EnableStateMachine
 public class Factory extends StateMachineConfigurerAdapter<String, String> {
 
-    @Value(value = "classpath:statemachineTest.uml")
+    @Value(value = "classpath:statemachineSimple.uml")
     private Resource location;
 
     @Override

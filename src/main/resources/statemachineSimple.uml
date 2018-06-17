@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_j8HNUHIWEeiFbd_qEL7dZg" name="statemachineSimple">
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_kD2NAHIWEeiFbd_qEL7dZg">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_j8kgUHIWEeiFbd_qEL7dZg" name="StateMachine1">
+    <region xmi:type="uml:Region" xmi:id="_j9RD4HIWEeiFbd_qEL7dZg" name="Region1">
+      <transition xmi:type="uml:Transition" xmi:id="_BrRvcHIYEeiFbd_qEL7dZg" name="LDR_Hitman_Pro_Finalize" source="_lnfKAHIWEeiFbd_qEL7dZg" target="_LqHKkHItEeiFbd_qEL7dZg">
+        <trigger xmi:type="uml:Trigger" xmi:id="_5V9LAHJeEeiFbd_qEL7dZg" name="LDR_Hitman_Pro_Trigger" event="_4-DBUHJeEeiFbd_qEL7dZg"/>
+      </transition>
+      <transition xmi:type="uml:Transition" xmi:id="_r2h90HIkEeiFbd_qEL7dZg" name="InitCheck_Idle" source="_of_f0HIkEeiFbd_qEL7dZg" target="_LgUZkHImEeiFbd_qEL7dZg">
+        <trigger xmi:type="uml:Trigger" xmi:id="_g63VIHJeEeiFbd_qEL7dZg" name="InitCheck_Trigger" event="_gsilQHJeEeiFbd_qEL7dZg"/>
+      </transition>
+      <transition xmi:type="uml:Transition" xmi:id="_z-4lAHIkEeiFbd_qEL7dZg" name="Initial_Init" source="_kr3PQHIWEeiFbd_qEL7dZg" target="_of_f0HIkEeiFbd_qEL7dZg"/>
+      <transition xmi:type="uml:Transition" xmi:id="_OvfEQHImEeiFbd_qEL7dZg" name="Idle_LDR_Hitman_Pro" source="_LgUZkHImEeiFbd_qEL7dZg" target="_lnfKAHIWEeiFbd_qEL7dZg">
+        <trigger xmi:type="uml:Trigger" xmi:id="_x0BqoHJeEeiFbd_qEL7dZg" name="Idle_Trigger" event="_v9_WEHJeEeiFbd_qEL7dZg"/>
+      </transition>
+      <transition xmi:type="uml:Transition" xmi:id="_PIadcHItEeiFbd_qEL7dZg" name="Finalize_Final" source="_LqHKkHItEeiFbd_qEL7dZg" target="_pc25EHIWEeiFbd_qEL7dZg">
+        <trigger xmi:type="uml:Trigger" xmi:id="_AEEo0HJfEeiFbd_qEL7dZg" name="Finalize_Trigger" event="__ju74HJeEeiFbd_qEL7dZg"/>
+      </transition>
+      <subvertex xmi:type="uml:Pseudostate" xmi:id="_kr3PQHIWEeiFbd_qEL7dZg" name="Initial"/>
+      <subvertex xmi:type="uml:State" xmi:id="_lnfKAHIWEeiFbd_qEL7dZg" name="LDR_Hitman_Pro"/>
+      <subvertex xmi:type="uml:FinalState" xmi:id="_pc25EHIWEeiFbd_qEL7dZg" name="Final"/>
+      <subvertex xmi:type="uml:State" xmi:id="_of_f0HIkEeiFbd_qEL7dZg" name="InitCheck"/>
+      <subvertex xmi:type="uml:State" xmi:id="_LgUZkHImEeiFbd_qEL7dZg" name="Idle"/>
+      <subvertex xmi:type="uml:State" xmi:id="_LqHKkHItEeiFbd_qEL7dZg" name="Finalize"/>
+    </region>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Signal" xmi:id="_gaKb0HJeEeiFbd_qEL7dZg" name="InitCheck_Signal"/>
+  <packagedElement xmi:type="uml:SignalEvent" xmi:id="_gsilQHJeEeiFbd_qEL7dZg" name="InitCheck_SE" signal="_gaKb0HJeEeiFbd_qEL7dZg"/>
+  <packagedElement xmi:type="uml:Signal" xmi:id="_vnx1gHJeEeiFbd_qEL7dZg" name="Idle_Signal"/>
+  <packagedElement xmi:type="uml:SignalEvent" xmi:id="_v9_WEHJeEeiFbd_qEL7dZg" name="Idle_SE" signal="_vnx1gHJeEeiFbd_qEL7dZg"/>
+  <packagedElement xmi:type="uml:Signal" xmi:id="_4xhoQHJeEeiFbd_qEL7dZg" name="LDR_Hitman_Pro_Signal"/>
+  <packagedElement xmi:type="uml:SignalEvent" xmi:id="_4-DBUHJeEeiFbd_qEL7dZg" name="LDR_Hitman_Pro_SE" signal="_4xhoQHJeEeiFbd_qEL7dZg"/>
+  <packagedElement xmi:type="uml:Signal" xmi:id="__MC0oHJeEeiFbd_qEL7dZg" name="Finalize_Signal"/>
+  <packagedElement xmi:type="uml:SignalEvent" xmi:id="__ju74HJeEeiFbd_qEL7dZg" name="Finalize_SE" signal="__MC0oHJeEeiFbd_qEL7dZg"/>
+</uml:Model>
