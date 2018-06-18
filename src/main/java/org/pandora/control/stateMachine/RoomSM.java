@@ -8,6 +8,7 @@ import org.pandora.control.clock.CountDown;
 import org.pandora.control.data.DataManager;
 import org.pandora.control.data.DataObject;
 import org.pandora.control.data.PuzzleData;
+import org.pandora.control.data.PuzzleEndState;
 import org.pandora.control.hints.HintManager;
 import org.pandora.control.music.AudioManager;
 import org.pandora.control.puzzle.Puzzle;
@@ -34,6 +35,7 @@ import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -42,7 +44,8 @@ public class RoomSM extends SerialCommunicator {
 
 	@Autowired
 	private StateMachine<String,String> stateMachine;
-	private List<String> nonPuzzleStates = Arrays.asList("Initial", "InitCheck", "Idle", "Finalize", "Final");
+	private static final List<String> nonPuzzleStates = Arrays.asList("Initial", "InitCheck", "Idle", "Finalize", "Final");
+	private static final String endState = "Finalize";
 
 	private ExecutorService EXECUTOR = Executors.newFixedThreadPool(10);
 	private PuzzleManager puzzleManager;
@@ -104,6 +107,7 @@ public class RoomSM extends SerialCommunicator {
 		if(reset) {
 			stateMachine.addStateListener(new StateMachineEventListener());
 			initializePort(port);
+			initData();
 			stateMachine.start();
 			finished = false;
 			started = true;
@@ -131,21 +135,25 @@ public class RoomSM extends SerialCommunicator {
 	}
 
 	public void setPuzzleState(String puzzleName, String state) {
-		sendCommandToPuzzle(puzzleName, state);
 		Optional<String> name = puzzleManager.getPuzzleName(puzzleName);
 		if (state.equals("finish") && name.isPresent()) {
-			puzzlesData.put(name.get(), PuzzleData.builder().succeeded(false).build());
+			PuzzleData puzzleData = puzzlesData.get(name.get());
+			puzzleData.setEndState(PuzzleEndState.FAILED);
+			puzzlesData.put(name.get(), puzzleData);
 		}
+		sendCommandToPuzzle(puzzleName, state);
 	}
 
-	private void finishPuzzle(String puzzleName) {
-		PuzzleData.PuzzleDataBuilder puzzleData = PuzzleData.builder()
-				.name(puzzleName)
-				.hints(hintManager.getNumberOfHints(puzzleName));
-		if (!puzzlesData.containsKey(puzzleName)) {
-			puzzleData.succeeded(true);
-		}
-		puzzlesData.put(puzzleName, puzzleData.build());
+	private void initData() {
+		puzzlesData = stateMachine.getStates().stream()
+				.map(State::getId)
+				.filter(puzzleName -> !nonPuzzleStates.contains(puzzleName))
+				.collect(Collectors.toMap(puzzleName -> puzzleName, puzzleName -> PuzzleData.builder()
+						.name(puzzleName)
+						.duration(-1)
+						.hints(-1)
+						.endState(PuzzleEndState.NOTSTARTED)
+						.build()));
 	}
 
 	@Override
@@ -201,12 +209,8 @@ public class RoomSM extends SerialCommunicator {
 
 	private Future applyPuzzle_PC(String identifier, String message) {
 		return EXECUTOR.submit(() -> puzzleManager.applyToPuzzle(identifier, message)
-				.ifPresent(pair -> {
-					if(pair.getValue1().equals("finished")) {
-						stateMachine.sendEvent(String.format("%s_Signal", pair.getValue0()));
-						finishPuzzle(pair.getValue0());
-					}
-				}));
+				.filter(pair -> pair.getValue1().equals("finished"))
+				.ifPresent(pair -> stateMachine.sendEvent(String.format("%s_Signal", pair.getValue0()))));
 	}
 
 	private Future initPuzzles() {
@@ -214,7 +218,12 @@ public class RoomSM extends SerialCommunicator {
 	}
 
 	private Future finishPuzzles() {
-		return EXECUTOR.submit(() -> sendCommandToAllPuzzles("finish"));
+		return EXECUTOR.submit(() -> {
+			puzzlesData.values().stream()
+					.filter(data -> data.getEndState() != PuzzleEndState.FINISHED)
+					.forEach(data -> data.setEndState(PuzzleEndState.FAILED));
+			sendCommandToAllPuzzles("finish");
+		});
 	}
 
 	private Future sendCommandToPuzzle(String puzzleName, String name) {
@@ -223,9 +232,15 @@ public class RoomSM extends SerialCommunicator {
 		);
 	}
 
-	private void sendCommandToAllPuzzles(String name) {
-		puzzleManager.getPuzzles().values()
-				.forEach(puzzle -> puzzle.getPC_PuzzleCommand(name)
+	private void sendCommandToAllPuzzles(String commandName) {
+		List<String> states = stateMachine.getStates().stream()
+				.map(State::getId)
+				.filter(puzzleName -> !nonPuzzleStates.contains(puzzleName))
+				.collect(Collectors.toList());
+
+		puzzleManager.getPuzzles().values().stream()
+				.filter(puzzle -> states.contains(puzzle.getName()))
+				.forEach(puzzle -> puzzle.getPC_PuzzleCommand(commandName)
                         .ifPresent(s -> writeData(puzzle.getIdentifier(), s))
 				);
 	}
@@ -307,8 +322,20 @@ public class RoomSM extends SerialCommunicator {
 
 	private class StateMachineEventListener extends StateMachineListenerAdapter<String, String> {
 
+		private Map<String,Integer> previousTime = new HashMap<>();
+
 		@Override
 		public void stateChanged(State<String, String> from, State<String, String> to) {
+			if (!nonPuzzleStates.contains(from.getId()) || from.getId().equals(endState)) {
+				PuzzleData data = puzzlesData.get(from.getId());
+				if(data.getEndState() == PuzzleEndState.NOTSTARTED) {
+					data.setEndState(PuzzleEndState.FINISHED);
+				}
+				data.setHints(hintManager.getNumberOfHints(from.getId()));
+				data.setDuration(previousTime.get(from.getId()));
+				puzzlesData.put(from.getId(), data);
+			}
+			previousTime.put(to.getId(), timeRemaining.getElapsedTime());
 		}
 
 		@Override

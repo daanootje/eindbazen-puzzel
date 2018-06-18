@@ -10,6 +10,6 @@ public class PuzzleData {
     private String name;
     private Integer duration;
     private Integer hints;
-    private Boolean succeeded;
+    private PuzzleEndState endState;
 
 }

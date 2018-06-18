@@ -22,23 +22,23 @@ public class AudioClip implements LineListener {
     private Path path;
     private Boolean audioCompleted;
 
-    public AudioClip(Path path) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+    AudioClip(Path path) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         this.path = path;
         clipName = path.getFileName().toString();
         initialize();
     }
 
-    public void playAudio() {
+    void playAudio() {
         if (!clip.isActive()) {
             clip.start();
         }
     }
 
-    public void pauseAudio() {
+    void pauseAudio() {
         clip.stop();
     }
 
-    public void restartAudio() {
+    void restartAudio() {
         clip.stop();
         clip.close();
         try {
