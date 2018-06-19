@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.pandora.control.clock.CountDown;
 import org.pandora.control.data.DataManager;
+import org.pandora.control.display.DesktopApi;
 import org.pandora.control.domain.Audio;
 import org.pandora.control.domain.Hint;
 import org.pandora.control.domain.Log;
@@ -20,7 +21,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
+import java.awt.*;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @Slf4j
 @ComponentScan
@@ -36,8 +40,12 @@ public class Application {
     @Value( "${log.location}" )
     private String logFolder;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
         SpringApplication.run(Application.class, args);
+
+//        DesktopApi api = new DesktopApi();
+        DesktopApi.browse(new URI("http://www.nu.nl"));
+
     }
 
     @Bean
