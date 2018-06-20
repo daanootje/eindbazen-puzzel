@@ -1,6 +1,6 @@
 package org.pandora.control.domain;
 
-import org.pandora.control.hints.HintManager;
+import org.pandora.control.display.DesktopApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,19 +10,19 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.ws.rs.core.Response;
 
 @RestController
-@RequestMapping("/puzzle")
-public class Hint {
+@RequestMapping("/display")
+public class Display {
 
-    private HintManager hintManager;
+    private DesktopApi desktopApi;
 
     @Autowired
-    public Hint(HintManager hintManager) {
-        this.hintManager = hintManager;
+    public Display(DesktopApi desktopApi) {
+        this.desktopApi = desktopApi;
     }
 
     @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
-    public Response createHintForPuzzle(@RequestBody String puzzleName) {
-        hintManager.displayHint(puzzleName);
+    public Response startTimerOnDisplay(@RequestBody String uri) {
+        desktopApi.openBrowser(uri);
         return Response.accepted().build();
     }
 
