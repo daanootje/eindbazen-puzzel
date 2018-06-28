@@ -1,11 +1,11 @@
 package org.pandora.control;
 
-
 import org.glassfish.jersey.server.ResourceConfig;
 import org.pandora.control.clock.CountDown;
 import org.pandora.control.data.DataManager;
 import org.pandora.control.display.DesktopApi;
 import org.pandora.control.domain.Audio;
+import org.pandora.control.domain.CORSFilter;
 import org.pandora.control.domain.Display;
 import org.pandora.control.domain.Hint;
 import org.pandora.control.domain.Log;
@@ -45,7 +45,7 @@ public class Application {
 
     @Bean
     public ResourceConfig jerseyConfig() {
-        return new ResourceConfig(Audio.class, Display.class, Hint.class, Log.class, Puzzle.class, Room.class, Time.class, WebSocketConfig.class);
+        return new ResourceConfig(Audio.class, Display.class, Hint.class, Log.class, Puzzle.class, Room.class, Time.class, WebSocketConfig.class, CORSFilter.class);
     }
 
     @Bean
