@@ -29,7 +29,7 @@ public class Time {
 
     @Scheduled(fixedRate = 1000)
     private void updating() {
-        customWebSocketHandler.sendMessageToUsers("myHandler", new TextMessage( time.getRemainingTimeInSeconds().toString()));
+        customWebSocketHandler.sendMessageToUsers("time_remaining", new TextMessage( time.getRemainingTimeInSeconds().toString()));
     }
 
     @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
