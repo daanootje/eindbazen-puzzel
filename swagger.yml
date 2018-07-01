@@ -40,7 +40,7 @@ definitions:
     properties:
       status:
         type: string
-        enum: [start, stop, resume, restart]
+        enum: [start, pause, restart]
 
   AudioStatus:
     type: object

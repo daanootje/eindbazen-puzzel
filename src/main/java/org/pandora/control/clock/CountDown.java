@@ -1,29 +1,38 @@
 package org.pandora.control.clock;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class CountDown {
 
-    private Timer timer;
+	private volatile boolean isRunning = false;
+
     private Integer timeRemaining;
     private Integer maxTime;
-	private TimerTask task;
+
+	private ScheduledExecutorService execService = Executors.newSingleThreadScheduledExecutor();
+	private Future<?> future = null;
     
     public CountDown(Integer startTimeInSeconds) {
-    	timer = new Timer();
     	maxTime = startTimeInSeconds;
     	timeRemaining = startTimeInSeconds;
-    	task = new TimerTask() {
-            public void run() {
-            	reduceTime();
-            }
-        };
     }
     
     public void start() {
-        timer.scheduleAtFixedRate(task, 1000, 1000);
+		if (isRunning)
+			return;
+
+		isRunning = true;
+		future = execService.scheduleWithFixedDelay(this::reduceTime, 0, 1000, TimeUnit.MILLISECONDS);
     }
+
+	public void pause() {
+		if(!isRunning) return;
+		future.cancel(false);
+		isRunning = false;
+	}
     
 	public Integer getRemainingTimeInSeconds() {
 		return timeRemaining;
@@ -32,28 +41,18 @@ public class CountDown {
 	public Integer getElapsedTime() {
     	return maxTime - timeRemaining;
 	}
-
-	public void pause() {
-		timer.cancel();
-	}
-	
-	public void resume() {
-	    this.timer = new Timer();
-	    this.timer.schedule(task, 1000, 1000);
-	}
 	
 	public void restart() {
 		pause();
 		timeRemaining = maxTime;
-		resume();
 	}
 	
-	private final void reduceTime() {
+	private synchronized void reduceTime() {
 		if(timeRemaining <= 0) {
-			pause();
+			future.cancel(false);
 		} else {
 			timeRemaining -= 1;
 		}
 	}
-    
+
 }

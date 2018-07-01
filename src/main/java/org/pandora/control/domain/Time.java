@@ -35,10 +35,7 @@ public class Time {
     @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
 	public Response startStopResetTime(@RequestBody TimeStatus timeStatus) {
 		switch (timeStatus.getStatus()) {
-			case resume:
-				time.resume();
-				break;
-			case stop:
+			case pause:
 				time.pause();
 				break;
 			case start:
