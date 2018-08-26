@@ -5,6 +5,7 @@ import org.pandora.control.clock.CountDown;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,6 +14,7 @@ import org.springframework.web.socket.TextMessage;
 
 import javax.ws.rs.core.Response;
 
+@Component
 @RestController
 @EnableScheduling
 @RequestMapping("/time")
@@ -28,8 +30,13 @@ public class Time {
 	}
 
     @Scheduled(fixedRate = 1000)
-    private void updating() {
-        customWebSocketHandler.sendMessageToUsers("time_remaining", new TextMessage( time.getRemainingTimeInSeconds().toString()));
+    private void updatingTime1() {
+        customWebSocketHandler.sendMessageToUsers("time_remaining1", new TextMessage( time.getRemainingTimeInSeconds().toString()));
+    }
+
+    @Scheduled(fixedRate = 1000)
+    private void updatingTime2() {
+        customWebSocketHandler.sendMessageToUsers("time_remaining2", new TextMessage( time.getRemainingTimeInSeconds().toString()));
     }
 
     @RequestMapping(method = RequestMethod.POST, consumes = "application/json")

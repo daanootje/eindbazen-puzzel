@@ -13,11 +13,17 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(myHandler(), "/time_remaining").setAllowedOrigins("*");
+        registry.addHandler(myHandler1(), "/time_remaining1").setAllowedOrigins("*");
+        registry.addHandler(myHandler2(), "/time_remaining2").setAllowedOrigins("*");
     }
 
     @Bean
-    public WebSocketHandler myHandler() {
+    public WebSocketHandler myHandler1() {
+        return new CustomWebSocketHandler();
+    }
+
+    @Bean
+    public WebSocketHandler myHandler2() {
         return new CustomWebSocketHandler();
     }
 
