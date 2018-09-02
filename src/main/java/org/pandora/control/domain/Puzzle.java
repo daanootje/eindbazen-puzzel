@@ -32,9 +32,13 @@ public class Puzzle {
         return Response.accepted().build();
     }
 
+    @RequestMapping(value = "/states", method = RequestMethod.GET, produces = "application/json")
+    public Response getPuzzleState() {
+        return Response.ok().entity(roomSM.getPuzzleStates()).build();
+    }
 
     @RequestMapping(value = "/{puzzleName}", method = RequestMethod.GET, produces = "application/json")
-    public Response getPuzzleState(@PathVariable String puzzleName) {
+    public Response getPuzzleStates(@PathVariable String puzzleName) {
         return roomSM.getPuzzleState(puzzleName)
                 .map(Response::ok)
                 .orElse(Response.status(Response.Status.NOT_FOUND))

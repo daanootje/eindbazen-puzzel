@@ -43,8 +43,12 @@ public abstract class SerialCommunicator implements SerialPortEventListener {
     protected void initializePort(String port) {
         try {
             this.connect(port);
-            this.initIOStream();
-            this.initListener();
+            if(serialPort != null) {
+                this.initIOStream();
+                this.initListener();
+            } else {
+                log.info("Unable to connect to serial device");
+            }
         } catch (PortInUseException e) {
             log.error(String.format("Failed to connect, port in use - %s", e.getMessage()));
         } catch (IOException e) {
@@ -74,11 +78,13 @@ public abstract class SerialCommunicator implements SerialPortEventListener {
 
     protected void disconnect() {
         try {
-            serialPort.removeEventListener();
-            serialPort.close();
-            input.close();
-            output.close();
-            setConnected(false);
+            if(serialPort != null) {
+                serialPort.removeEventListener();
+                serialPort.close();
+                input.close();
+                output.close();
+                setConnected(false);
+            }
         } catch (IOException e) {
             log.error(String.format("Failed to close %s - %s", serialPort.getName(), e.getMessage()));
         }
@@ -95,10 +101,13 @@ public abstract class SerialCommunicator implements SerialPortEventListener {
     private void connect(String port) throws PortInUseException {
         CommPortIdentifier selectedPortIdentifier = portMap.get(port);
         CommPort commPort;
-        commPort = selectedPortIdentifier.open("TigerControlPanel", TIMEOUT);
-        serialPort = (SerialPort)commPort;
+        if(selectedPortIdentifier != null) {
+            commPort = selectedPortIdentifier.open("TigerControlPanel", TIMEOUT);
+            serialPort = (SerialPort)commPort;
 
-        setConnected(true);
+            setConnected(true);
+        }
+
 
         //CODE ON SETTING BAUD RATE ETC OMITTED
         //XBEE PAIR ASSUMED TO HAVE SAME SETTINGS ALREADY

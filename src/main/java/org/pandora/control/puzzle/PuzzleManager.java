@@ -37,6 +37,11 @@ public class PuzzleManager {
         }
     }
 
+    public Map<String,String> getPuzzleStates() {
+        return puzzleMap.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getPuzzleState()));
+    }
+
     public Optional<String> getPuzzleStateInfo(String puzzleName) {
         Optional<String> stateInfo = this.getPuzzle(puzzleName).map(Puzzle::getStateInfo);
         if(stateInfo.isPresent()) {
@@ -91,7 +96,7 @@ public class PuzzleManager {
                 .name(name)
                 .SH(puzzle.getSH())
                 .SL(puzzle.getSL())
-                .puzzleState("init")
+                .puzzleState("Unknown")
                 .stateInfo("initializing puzzle")
                 .PC_Puzzle(flattenMap(puzzle.getPC_Puzzle()))
                 .Puzzle_PC(flattenMap(puzzle.getPuzzle_PC()))

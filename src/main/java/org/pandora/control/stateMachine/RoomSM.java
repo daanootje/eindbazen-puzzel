@@ -297,6 +297,10 @@ public class RoomSM extends SerialCommunicator {
 		return puzzleManager.getPuzzleState(puzzleName);
 	}
 
+	public Map<String,String> getPuzzleStates() {
+		return puzzleManager.getPuzzleStates();
+	}
+
 	public Optional<String> getPuzzleStateInfo(String puzzleName) {
 		return puzzleManager.getPuzzleStateInfo(puzzleName);
 	}
